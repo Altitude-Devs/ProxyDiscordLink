@@ -7,7 +7,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.proxy.Player;
 
-public class playerLeave {
+public class PlayerLeave {
 
     @Subscribe(order = PostOrder.LATE)
     public void onPlayerLeave(DisconnectEvent event) {

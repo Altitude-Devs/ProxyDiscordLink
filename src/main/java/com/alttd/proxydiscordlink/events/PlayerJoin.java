@@ -14,7 +14,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
 
-public class playerJoin {
+public class PlayerJoin {
 
     @Subscribe(order = PostOrder.LATE)
     public void onPlayerJoin(ServerConnectedEvent event) {
