@@ -70,8 +70,8 @@ public class DiscordLink {
     }
 
     public void loadEvents() {
-        server.getEventManager().register(new PlayerJoin(), this);
-        server.getEventManager().register(new PlayerLeave(), this);
+        server.getEventManager().register(this, new PlayerJoin());
+        server.getEventManager().register(this, new PlayerLeave());
     }
 
     public File getDataDirectory() {
