@@ -1,0 +1,7 @@
+.idea/
+*.iml
+*.bat
+*.xml
+target/
+src/test/
+src/main/resources/
