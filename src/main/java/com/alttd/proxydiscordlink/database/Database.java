@@ -275,7 +275,9 @@ public class Database {
             statement.setString(1, uuid.toString());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getString("player_name");
+                return resultSet.getString("nickname")
+                        .replaceAll("\\{#[<>0-9a-fA-F]{6,8}}", "")
+                        .replaceAll("[&§].", "");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
