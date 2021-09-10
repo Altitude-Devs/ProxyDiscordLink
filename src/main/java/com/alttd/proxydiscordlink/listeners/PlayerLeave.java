@@ -1,4 +1,4 @@
-package com.alttd.proxydiscordlink.events;
+package com.alttd.proxydiscordlink.listeners;
 
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.DiscordLink;

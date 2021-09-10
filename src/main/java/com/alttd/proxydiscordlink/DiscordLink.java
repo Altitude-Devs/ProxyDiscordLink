@@ -4,6 +4,8 @@ import com.alttd.proxydiscordlink.commands.DiscordCommand;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.database.DatabaseConnection;
+import com.alttd.proxydiscordlink.listeners.PlayerJoin;
+import com.alttd.proxydiscordlink.listeners.PlayerLeave;
 import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Cache;
 import com.google.inject.Inject;
@@ -55,6 +57,7 @@ public class DiscordLink {
             //TODO shutdown plugin
         }
         loadCommands();
+        loadEvents();
     }
 
     public void reloadConfig() {
@@ -64,6 +67,11 @@ public class DiscordLink {
 
     public void loadCommands() {// all (proxy)commands go here
         server.getCommandManager().register("discord", new DiscordCommand(), "discordlink");
+    }
+
+    public void loadEvents() {
+        server.getEventManager().register(new PlayerJoin(), this);
+        server.getEventManager().register(new PlayerLeave(), this);
     }
 
     public File getDataDirectory() {
