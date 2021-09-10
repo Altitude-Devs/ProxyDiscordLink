@@ -45,7 +45,7 @@ public class DiscordLink {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         ALogger.init(logger);
-        ReloadConfig();
+        reloadConfig();
         try {
             DatabaseConnection.initialize();
         } catch (SQLException exception) {
@@ -57,7 +57,7 @@ public class DiscordLink {
         loadCommands();
     }
 
-    public void ReloadConfig() {
+    public void reloadConfig() {
         Config.init();
         ALogger.info("Reloaded DiscordLink config.");
     }

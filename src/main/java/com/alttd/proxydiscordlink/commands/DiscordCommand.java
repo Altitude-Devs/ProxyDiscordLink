@@ -2,11 +2,13 @@ package com.alttd.proxydiscordlink.commands;
 
 import com.alttd.proxydiscordlink.commands.subcommands.CheckLinked;
 import com.alttd.proxydiscordlink.commands.subcommands.Link;
+import com.alttd.proxydiscordlink.commands.subcommands.Reload;
 import com.alttd.proxydiscordlink.commands.subcommands.Unlink;
 import com.alttd.proxydiscordlink.config.Config;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
@@ -21,7 +23,7 @@ public class DiscordCommand implements SimpleCommand {
     private final MiniMessage miniMessage;
 
     public DiscordCommand() {
-        subCommands = Arrays.asList(new CheckLinked(), new Link(), new Unlink());
+        subCommands = Arrays.asList(new CheckLinked(), new Link(), new Unlink(), new Reload());
         miniMessage = MiniMessage.get();
     }
 
@@ -33,8 +35,10 @@ public class DiscordCommand implements SimpleCommand {
         if (args.length < 1) {
             if (!source.hasPermission("discordlink.link"))
                 source.sendMessage(miniMessage.parse(Config.NO_PERMISSION));
-            else
+            else if (source instanceof Player)
                 source.sendMessage(miniMessage.parse(Config.DISCORD_LINK));
+            else
+                source.sendMessage(miniMessage.parse(Config.NO_CONSOLE));
             return;
         }
 

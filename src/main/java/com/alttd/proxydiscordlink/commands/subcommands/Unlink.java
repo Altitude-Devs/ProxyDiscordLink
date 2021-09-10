@@ -35,7 +35,7 @@ public class Unlink implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         if (!(source instanceof Player player)) {
-            source.sendMessage(miniMessage.parse(Config.CONSOLE));
+            source.sendMessage(miniMessage.parse(Config.NO_CONSOLE));
             return;
         }
         if (!player.hasPermission(getPermission())) {

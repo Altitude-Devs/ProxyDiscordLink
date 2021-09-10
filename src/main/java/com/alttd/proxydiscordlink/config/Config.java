@@ -195,14 +195,17 @@ public final class Config {
     public static String IS_LINKED = "<yellow><player> is <linked_status>.</yellow>";
     public static String INVALID_PLAYER = "<red><player> is not online or is not a valid player.</red>";
     public static String NO_PERMISSION = "<red>You do not have permission to do that.</red>";
-    public static String CONSOLE = "<red>This command can not be executed from console.</red>";
+    public static String NO_CONSOLE = "<red>This command can not be executed from console.</red>";
+    public static String RELOAD_CONFIG = "<green>Reloaded DiscordLink config.</green>";
     public static String HELP_MESSAGE = "<yellow>DiscordLink commands:\n<commands></yellow>";
     public static String HELP_LINK = "<yellow><gold>/discord link</gold>: Get a code which can be used to link your Minecraft and Discord accounts.</yellow>";
     public static String HELP_UNLINK = "<yellow><gold>/discord unlink</gold>: Unlink your Minecraft and Discord accounts.</yellow>";
     public static String HELP_CHECK_LINKED = "<yellow><gold>/discord checklinked <user></gold>: Check if the specified user has their Minecraft and Discord accounts linked.</yellow>";
+    public static String HELP_RELOAD = "<yellow><gold>/discord reload</gold>: Reload the config.</yellow>";
 
     private static void loadMessages() {
         DISCORD_MESSAGE = getList("messages.discord-message", DISCORD_MESSAGE);
+        DISCORD_LINK = getString("messages.discord-link", DISCORD_LINK);
         GIVE_CODE = getString("messages.give-code", GIVE_CODE);
         ALREADY_LINKED_ACCOUNTS = getString("messages.already-linked-accounts", ALREADY_LINKED_ACCOUNTS);
         ALREADY_GOT_CODE = getString("messages.already-got-code", ALREADY_GOT_CODE);
@@ -211,10 +214,12 @@ public final class Config {
         IS_LINKED = getString("messages.is-linked", IS_LINKED);
         INVALID_PLAYER = getString("messages.invalid-player", INVALID_PLAYER);
         NO_PERMISSION = getString("messages.no-permission", NO_PERMISSION);
-        CONSOLE = getString("messages.console", CONSOLE);
-        HELP_MESSAGE = getString("message.help-message", HELP_MESSAGE);
-        HELP_LINK = getString("message.help-link", HELP_LINK);
-        HELP_UNLINK = getString("message.help-unlink", HELP_UNLINK);
-        HELP_CHECK_LINKED = getString("message.help-check-linked", HELP_CHECK_LINKED);
+        NO_CONSOLE = getString("messages.no-console", NO_CONSOLE);
+        RELOAD_CONFIG = getString("messages.reload-config", RELOAD_CONFIG);
+        HELP_MESSAGE = getString("messages.help-message", HELP_MESSAGE);
+        HELP_LINK = getString("messages.help-link", HELP_LINK);
+        HELP_UNLINK = getString("messages.help-unlink", HELP_UNLINK);
+        HELP_CHECK_LINKED = getString("messages.help-check-linked", HELP_CHECK_LINKED);
+        HELP_RELOAD = getString("messages.help-reload", HELP_RELOAD);
     }
 }
