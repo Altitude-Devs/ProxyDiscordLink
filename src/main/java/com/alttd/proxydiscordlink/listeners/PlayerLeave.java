@@ -10,7 +10,7 @@ import com.velocitypowered.api.proxy.Player;
 public class PlayerLeave {
 
     @Subscribe(order = PostOrder.LATE)
-    public void onPlayerLeave(DisconnectEvent event) {
+    public void playerDisconnect(DisconnectEvent event) {
         Player player = event.getPlayer();
 
         Database database = DiscordLink.getPlugin().getDatabase();

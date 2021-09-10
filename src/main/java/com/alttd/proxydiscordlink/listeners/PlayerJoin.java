@@ -6,7 +6,7 @@ import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Utilities;
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.proxy.Player;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
@@ -17,7 +17,7 @@ import net.luckperms.api.node.types.InheritanceNode;
 public class PlayerJoin {
 
     @Subscribe(order = PostOrder.LATE)
-    public void onPlayerJoin(ServerConnectedEvent event) {
+    public void playerLogin(LoginEvent event) {
         Player player = event.getPlayer();
         Database database = DiscordLink.getPlugin().getDatabase();
 
