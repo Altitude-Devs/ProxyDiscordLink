@@ -255,11 +255,11 @@ public class Database {
     public String uuidFromName(String playerName) {
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("SELECT * FROM linked_accounts WHERE player_name = '" + playerName + "'");
+                    .prepareStatement("SELECT player_uuid FROM linked_accounts WHERE player_name = '" + playerName + "'");
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return resultSet.getString("player_name");
+                return resultSet.getString("player_uuid");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();

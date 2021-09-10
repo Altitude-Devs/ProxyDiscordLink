@@ -46,11 +46,13 @@ public class CheckLinked implements SubCommand {
         Optional<Player> optionalPlayer = DiscordLink.getPlugin().getProxy().getPlayer(args[1]);
         if (optionalPlayer.isEmpty())
         {
-            optionalPlayer = DiscordLink.getPlugin().getProxy()
-                    .getPlayer(UUID.fromString(DiscordLink.getPlugin().getDatabase().uuidFromName(args[1])));
+            String uuidFromName = DiscordLink.getPlugin().getDatabase().uuidFromName(args[1]);
+            if (uuidFromName != null)
+                optionalPlayer = DiscordLink.getPlugin().getProxy()
+                        .getPlayer(UUID.fromString(uuidFromName));
             if (optionalPlayer.isEmpty())
             {
-                source.sendMessage(miniMessage.parse(Config.INVALID_PLAYER));
+                source.sendMessage(miniMessage.parse(Config.INVALID_PLAYER, Template.of("player", args[1])));
                 return;
             }
         }
