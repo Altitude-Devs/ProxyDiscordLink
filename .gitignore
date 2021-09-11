@@ -1,7 +1,50 @@
-.idea/
-*.iml
-*.bat
-dependency-reduced-pom.xml
+#
+.idea
+run
+
+.gradle/
+build/
+
+# Eclipse stuff
+.classpath
+.project
+.settings/
+
+# VSCode stuff
+.vscode/
+
+# netbeans
+nbproject/
+nbactions.xml
+
+# we use maven!
+build.xml
+
+# maven
 target/
-src/test/
-src/main/resources/
+dependency-reduced-pom.xml
+
+# vim
+.*.sw[a-p]
+
+# various other potential build files
+build/
+bin/
+dist/
+manifest.mf
+
+# Mac filesystem dust
+.DS_Store/
+.DS_Store
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/
+out/
+
+# Linux temp files
+*~
+
+!gradle/wrapper/gradle-wrapper.jar
