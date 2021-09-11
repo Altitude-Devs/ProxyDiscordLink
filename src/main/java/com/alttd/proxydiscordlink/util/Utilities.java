@@ -1,10 +1,10 @@
 package com.alttd.proxydiscordlink.util;
 
+import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.config.Config;
-import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
@@ -85,5 +85,17 @@ public class Utilities {
 
     public static String getRankName(Player player) {
         return getLuckPerms().getUserManager().getUser(player.getUniqueId()).getPrimaryGroup();
+    }
+
+    public static String capitalize(String str) {
+        if(str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public static void broadcast(String message) {
+        ProxyServer server = DiscordLink.getPlugin().getProxy();
+        server.sendMessage(miniMessage.parse(message));
     }
 }

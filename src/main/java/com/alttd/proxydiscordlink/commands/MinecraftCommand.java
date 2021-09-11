@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DiscordCommand implements SimpleCommand {
+public class MinecraftCommand implements SimpleCommand {
 
     private final List<SubCommand> subCommands;
     private final MiniMessage miniMessage;
 
-    public DiscordCommand() {
+    public MinecraftCommand() {
         subCommands = Arrays.asList(new CheckLinked(), new Link(), new Unlink(), new Reload());
         miniMessage = MiniMessage.get();
     }

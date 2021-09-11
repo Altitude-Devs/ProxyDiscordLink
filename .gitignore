@@ -1,7 +1,7 @@
 .idea/
 *.iml
 *.bat
-*.xml
+dependency-reduced-pom.xml
 target/
 src/test/
 src/main/resources/

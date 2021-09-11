@@ -1,6 +1,7 @@
 package com.alttd.proxydiscordlink;
 
-import com.alttd.proxydiscordlink.commands.DiscordCommand;
+import com.alttd.proxydiscordlink.bot.Bot;
+import com.alttd.proxydiscordlink.commands.MinecraftCommand;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.database.DatabaseConnection;
@@ -8,6 +9,7 @@ import com.alttd.proxydiscordlink.listeners.PlayerJoin;
 import com.alttd.proxydiscordlink.listeners.PlayerLeave;
 import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Cache;
+import com.alttd.proxydiscordlink.util.JarLoader;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -32,6 +34,7 @@ public class DiscordLink {
     private final Path dataDirectory;
     private final Database database;
     private final Cache cache;
+    private Bot bot;
 
     @Inject
     public DiscordLink(ProxyServer proxyServer, Logger proxyLogger, @DataDirectory Path proxydataDirectory)
@@ -58,6 +61,7 @@ public class DiscordLink {
         }
         loadCommands();
         loadEvents();
+        loadBot();
     }
 
     public void reloadConfig() {
@@ -66,13 +70,28 @@ public class DiscordLink {
     }
 
     public void loadCommands() {// all (proxy)commands go here
-        server.getCommandManager().register("discord", new DiscordCommand(), "discordlink");
+        server.getCommandManager().register("discord", new MinecraftCommand(), "discordlink");
     }
 
     public void loadEvents() {
         server.getEventManager().register(this, new PlayerJoin());
         server.getEventManager().register(this, new PlayerLeave());
     }
+
+    public void loadBot() {
+//        String JDAVersion = "4.2.0";
+//        String JDABuild = "168";
+//        String JDAUrl = "https://github.com/DV8FromTheWorld/JDA/releases/download/v" + JDAVersion + "/JDA-" + JDAVersion + "_" + JDABuild + "-withDependencies.jar";
+//        String JDAFile = "jda-" + JDAVersion + "_" + JDABuild + ".jar";
+//        if (new JarLoader().loadJar(JDAUrl, new File(new File(getDataDirectory(), "libs"), JDAFile))) {
+//            ALogger.info("JDA successfully loaded");
+//        } else {
+//            ALogger.error("JDA could not be loaded!");
+//        }
+        bot = new Bot();
+        bot.connect();
+    }
+
 
     public File getDataDirectory() {
         return dataDirectory.toFile();
@@ -96,5 +115,9 @@ public class DiscordLink {
 
     public Cache getCache() {
         return cache;
+    }
+
+    public Bot getBot() {
+        return bot;
     }
 }
