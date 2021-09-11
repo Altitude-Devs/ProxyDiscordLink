@@ -6,6 +6,7 @@ import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.database.DatabaseConnection;
+import com.alttd.proxydiscordlink.minecraft.listeners.LuckpermsEvents;
 import com.alttd.proxydiscordlink.minecraft.listeners.PlayerJoin;
 import com.alttd.proxydiscordlink.minecraft.listeners.PlayerLeave;
 import com.alttd.proxydiscordlink.util.ALogger;
@@ -77,6 +78,7 @@ public class DiscordLink {
     public void loadEvents() {
         server.getEventManager().register(this, new PlayerJoin());
         server.getEventManager().register(this, new PlayerLeave());
+        new LuckpermsEvents().listener();
     }
 
     public void loadBot() {

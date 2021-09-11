@@ -1,12 +1,15 @@
 package com.alttd.proxydiscordlink.objects;
 
 import com.alttd.proxydiscordlink.DiscordLink;
+import com.alttd.proxydiscordlink.bot.api.DiscordModifyRole;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
+import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Utilities;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeBuilder;
+import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.node.types.PermissionNode;
 
 import java.util.*;
@@ -52,10 +55,25 @@ public class DiscordLinkPlayer {
         return discordUsername;
     }
 
-    public void update(List<DiscordRole> roles, boolean added) {
+    public void updateDiscord(List<DiscordRole> roles, boolean added) {
+        for (DiscordRole role : roles) {
+            if (role.getDisplayName().equalsIgnoreCase("nitro"))
+                isNitro = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
+            if (List.of("viceroy", "count", "duke", "archduke").contains(role.getDisplayName().toLowerCase()))
+                isDonor = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
+            if (!role.isUpdateToMinecraft())
+                continue;
+            //TODO implement
+        }
+        roles.forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
+
+        DiscordLink.getPlugin().getDatabase().syncPlayer(this);
+        //TODO implement
+    }
+
+    public void updateMinecraft(List<DiscordRole> roles, boolean added) {
         User user = Utilities.getLuckPerms().getUserManager().getUser(getUuid());
-        if (user == null)
-        {
+        if (user == null) {
             ALogger.error("Tried updating a user luckperms couldn't find: " + getUuid());
             return;
         }
@@ -67,12 +85,12 @@ public class DiscordLinkPlayer {
                 isDonor = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
             if (!role.isUpdateToMinecraft())
                 continue;
-            PermissionNode group = PermissionNode.builder("group." + role.getLuckpermsName()).build();
-            if (!user.getNodes().contains(group))
-                if (added)
-                    user.getNodes().add(group);
-                else
-                    user.getNodes().remove(group);
+            InheritanceNode group = InheritanceNode.builder(role.getLuckpermsName()).build();
+
+            if (!user.getNodes().contains(group) && added)
+                user.data().add(group);
+            else if (!added)
+                user.data().remove(group);
         }
         DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement

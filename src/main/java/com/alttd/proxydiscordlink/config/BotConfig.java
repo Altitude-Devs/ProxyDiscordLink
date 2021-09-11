@@ -166,10 +166,12 @@ public class BotConfig {
 
     public static String BOT_TOKEN = "unconfigured";
     public static String COMMAND_CHANNEL = "unconfigured";
+    public static long GUILD_ID = -1;
 
     private static void settings() {
         BOT_TOKEN = getString("settings.token", BOT_TOKEN);
         COMMAND_CHANNEL = getString("settings.command_channel", COMMAND_CHANNEL);
+        GUILD_ID = getLong("settings.guild-id", GUILD_ID);
     }
 
     public static String SL_MINIMUMRANK = "trainee";

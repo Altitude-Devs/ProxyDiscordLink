@@ -7,6 +7,9 @@ import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -90,5 +93,33 @@ public class Bot {
         } catch (Exception e) {
             ALogger.error("caught some exception, " + e);
         }
+    }
+
+    public boolean addRole(long userId, long roleId, long guildId) {
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null)
+            return false;
+        Role role = guild.getRoleById(roleId);
+        if (role == null)
+            return false;
+        Member member = guild.getMemberById(userId);
+        if (member == null)
+            return false;
+        guild.addRoleToMember(member, role).queue();
+        return true;
+    }
+
+    public boolean removeRole(long userId, long roleId, long guildId) {
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null)
+            return false;
+        Role role = guild.getRoleById(roleId);
+        if (role == null)
+            return false;
+        Member member = guild.getMemberById(userId);
+        if (member == null)
+            return false;
+        guild.removeRoleFromMember(member, role).queue();
+        return true;
     }
 }

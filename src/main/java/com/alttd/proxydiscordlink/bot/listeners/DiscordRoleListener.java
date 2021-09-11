@@ -48,7 +48,7 @@ public class DiscordRoleListener extends ListenerAdapter {
             return;
         }
 
-        player.update(added_roles, true);
+        player.updateMinecraft(added_roles, true);
         added_roles.forEach(discordRole -> {
             if (!discordRole.getAnnouncement().isEmpty()) {
                 Component component = miniMessage.parse(
@@ -74,6 +74,6 @@ public class DiscordRoleListener extends ListenerAdapter {
             return;
 
         DiscordLink.getPlugin().getDatabase().getPlayer(event.getUser().getIdLong())
-                .update(removed_roles, false);
+                .updateMinecraft(removed_roles, false);
     }
 }
