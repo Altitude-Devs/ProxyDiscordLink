@@ -62,7 +62,7 @@ public class BotConfig {
         verbose = getBoolean("verbose", true);
         version = getInt("config-version", 1);
 
-        readConfig(Config.class, null);
+        readConfig(BotConfig.class, null);
         try {
             configLoader.save(config);
         } catch (IOException e) {
