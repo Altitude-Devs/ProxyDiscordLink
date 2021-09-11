@@ -162,8 +162,8 @@ public class BotConfig {
      * ONLY EDIT ANYTHING BELOW THIS LINE
      **/
 
-    public static String BOT_TOKEN = "";
-    public static String COMMAND_CHANNEL = "";
+    public static String BOT_TOKEN = "unconfigured";
+    public static String COMMAND_CHANNEL = "unconfigured";
     private static void settings()
     {
         BOT_TOKEN = getString("settings.token", BOT_TOKEN);
@@ -173,7 +173,7 @@ public class BotConfig {
     public static String SL_MINIMUMRANK = "trainee";
     public static String SL_HOVERMESSAGE = "Click here to message %player% on %servername%.";
     public static String SL_CLICKCOMMAND = "/msg %player%";
-    private static void Stafflist() {
+    private static void stafflist() {
         SL_MINIMUMRANK = getString("commands.staff-list.minimum-rank", SL_MINIMUMRANK);
         SL_HOVERMESSAGE = getString("commands.staff-list.hover-message", SL_HOVERMESSAGE);
         SL_CLICKCOMMAND = getString("commands.staff-list.click-command", SL_CLICKCOMMAND);

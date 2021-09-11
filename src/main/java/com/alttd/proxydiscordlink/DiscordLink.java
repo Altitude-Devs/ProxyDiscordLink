@@ -2,6 +2,7 @@ package com.alttd.proxydiscordlink;
 
 import com.alttd.proxydiscordlink.bot.Bot;
 import com.alttd.proxydiscordlink.commands.MinecraftCommand;
+import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.database.DatabaseConnection;
@@ -66,6 +67,7 @@ public class DiscordLink {
 
     public void reloadConfig() {
         Config.init();
+        BotConfig.init();
         ALogger.info("Reloaded DiscordLink config.");
     }
 
