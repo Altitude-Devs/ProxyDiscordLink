@@ -56,7 +56,7 @@ tasks {
             //exclude(dependency("net.kyori:.*:.*"))
         }
         listOf(
-            "net.kyori",
+//            "net.kyori",
             "net.dv8tion.jda"
         ).forEach { relocate(it, "${rootProject.group}.lib.$it") }
     }

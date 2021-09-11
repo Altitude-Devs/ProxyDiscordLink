@@ -1,7 +1,7 @@
-package com.alttd.proxydiscordlink.commands.subcommands;
+package com.alttd.proxydiscordlink.minecraft.commands.subcommands;
 
 import com.alttd.proxydiscordlink.DiscordLink;
-import com.alttd.proxydiscordlink.commands.SubCommand;
+import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.alttd.proxydiscordlink.config.Config;
 import com.velocitypowered.api.command.CommandSource;
 import net.kyori.adventure.text.minimessage.MiniMessage;

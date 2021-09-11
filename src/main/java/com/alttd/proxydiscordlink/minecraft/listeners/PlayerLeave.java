@@ -1,4 +1,4 @@
-package com.alttd.proxydiscordlink.listeners;
+package com.alttd.proxydiscordlink.minecraft.listeners;
 
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.DiscordLink;

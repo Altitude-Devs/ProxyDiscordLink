@@ -1,4 +1,4 @@
-package com.alttd.proxydiscordlink.commands;
+package com.alttd.proxydiscordlink.minecraft.commands;
 
 import com.velocitypowered.api.command.CommandSource;
 

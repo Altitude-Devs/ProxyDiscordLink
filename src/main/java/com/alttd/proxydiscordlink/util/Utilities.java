@@ -13,6 +13,7 @@ import net.luckperms.api.node.types.InheritanceNode;
 
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Utilities {
@@ -26,8 +27,8 @@ public class Utilities {
         return luckPerms;
     }
 
-    public static boolean isDonor(Player player) {
-        User user = getLuckPerms().getUserManager().getUser(player.getUniqueId());
+    public static boolean isDonor(UUID uuid) {
+        User user = getLuckPerms().getUserManager().getUser(uuid);
         if (user == null) {
             ALogger.error("Unable to find user in isDonor!");
             return false;
@@ -83,8 +84,8 @@ public class Utilities {
         return salt.toString();
     }
 
-    public static String getRankName(Player player) {
-        return getLuckPerms().getUserManager().getUser(player.getUniqueId()).getPrimaryGroup();
+    public static String getRankName(UUID uuid) {
+        return getLuckPerms().getUserManager().getUser(uuid).getPrimaryGroup();
     }
 
     public static String capitalize(String str) {

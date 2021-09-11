@@ -19,7 +19,7 @@ public abstract class DiscordCommand {
 
     public abstract void handleCommand(Message message, String sender, String command, String[] args);
 
-    protected static void loadCommands() {
+    public static void loadCommands() {
         commands = new ArrayList<>();
 
         loadCommand(new DiscordStaffList(),
@@ -31,7 +31,7 @@ public abstract class DiscordCommand {
         Collections.addAll(commands, discordCommands);
     }
 
-    protected static List<DiscordCommand> getCommands() {
+    public static List<DiscordCommand> getCommands() {
         return commands;
     }
 }

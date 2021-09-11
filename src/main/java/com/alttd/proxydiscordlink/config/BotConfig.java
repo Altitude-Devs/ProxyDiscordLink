@@ -1,5 +1,7 @@
 package com.alttd.proxydiscordlink.config;
 
+import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
+import com.alttd.proxydiscordlink.util.ALogger;
 import com.google.common.base.Throwables;
 import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.ConfigurationNode;
@@ -164,8 +166,8 @@ public class BotConfig {
 
     public static String BOT_TOKEN = "unconfigured";
     public static String COMMAND_CHANNEL = "unconfigured";
-    private static void settings()
-    {
+
+    private static void settings() {
         BOT_TOKEN = getString("settings.token", BOT_TOKEN);
         COMMAND_CHANNEL = getString("settings.command_channel", COMMAND_CHANNEL);
     }
@@ -173,9 +175,37 @@ public class BotConfig {
     public static String SL_MINIMUMRANK = "trainee";
     public static String SL_HOVERMESSAGE = "Click here to message %player% on %servername%.";
     public static String SL_CLICKCOMMAND = "/msg %player%";
+
     private static void stafflist() {
         SL_MINIMUMRANK = getString("commands.staff-list.minimum-rank", SL_MINIMUMRANK);
         SL_HOVERMESSAGE = getString("commands.staff-list.hover-message", SL_HOVERMESSAGE);
         SL_CLICKCOMMAND = getString("commands.staff-list.click-command", SL_CLICKCOMMAND);
+    }
+
+    private static void roles() {
+        DiscordRole.cleanDiscordRoles();
+        ConfigurationNode node = getNode("sync-roles");
+        if (node.getChildrenMap().isEmpty())
+            ALogger.warn("No roles found in BotConfig, add them to use sync-roles feature:\n" +
+                    "sync-roles:\n\t" +
+                    "example_rank:\n\t\t" +
+                    "role-id: 0\n\t\t" +
+                    "luckperms-name: example\n\t\t" +
+                    "display-name: Example Rank\n\t\t" +
+                    "update-to-minecraft: true\n\t\t" +
+                    "announcement: <player> got example rank!");
+        node.getChildrenMap().forEach((key, value) -> {
+                long id = value.getNode("role-id").getLong(-1);
+                String luckpermsName = value.getNode("luckperms-name").getString("example");
+                String display_name = value.getNode("display-name").getString("Example");
+                boolean updateToMinecraft = value.getNode("update-to-minecraft").getBoolean(false);
+                String announcement = value.getNode("announcement").getString("<player> got example rank!");
+
+                if (id == -1)
+                    ALogger.error("Invalid id in BotConfig for roles.");
+                else
+                    DiscordRole.addDiscordRole(new DiscordRole(id, luckpermsName, display_name, updateToMinecraft, announcement));
+
+        });
     }
 }

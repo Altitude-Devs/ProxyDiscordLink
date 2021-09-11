@@ -1,9 +1,9 @@
-package com.alttd.proxydiscordlink.commands;
+package com.alttd.proxydiscordlink.minecraft.commands;
 
-import com.alttd.proxydiscordlink.commands.subcommands.CheckLinked;
-import com.alttd.proxydiscordlink.commands.subcommands.Link;
-import com.alttd.proxydiscordlink.commands.subcommands.Reload;
-import com.alttd.proxydiscordlink.commands.subcommands.Unlink;
+import com.alttd.proxydiscordlink.minecraft.commands.subcommands.CheckLinked;
+import com.alttd.proxydiscordlink.minecraft.commands.subcommands.Link;
+import com.alttd.proxydiscordlink.minecraft.commands.subcommands.Reload;
+import com.alttd.proxydiscordlink.minecraft.commands.subcommands.Unlink;
 import com.alttd.proxydiscordlink.config.Config;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.velocitypowered.api.command.CommandSource;

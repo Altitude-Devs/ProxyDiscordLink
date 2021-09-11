@@ -1,11 +1,15 @@
 package com.alttd.proxydiscordlink.bot;
 
+import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
+import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
 import java.util.concurrent.TimeUnit;
@@ -16,9 +20,14 @@ public class Bot {
     public void connect() {
         disconnect();
         try {
-            jda = JDABuilder.createDefault(BotConfig.BOT_TOKEN).build();
+            jda = JDABuilder
+                    .createDefault(BotConfig.BOT_TOKEN)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                    .build();
             jda.setAutoReconnect(true);
-            jda.addEventListener(new JDAListener());
+            jda.addEventListener(new DiscordMessageListener(),
+                    new DiscordRoleListener());
             DiscordCommand.loadCommands();
         } catch (LoginException e) {
             jda = null;

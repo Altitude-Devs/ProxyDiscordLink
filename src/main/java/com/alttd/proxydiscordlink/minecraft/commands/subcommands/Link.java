@@ -1,7 +1,7 @@
-package com.alttd.proxydiscordlink.commands.subcommands;
+package com.alttd.proxydiscordlink.minecraft.commands.subcommands;
 
 import com.alttd.proxydiscordlink.DiscordLink;
-import com.alttd.proxydiscordlink.commands.SubCommand;
+import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.util.Utilities;
@@ -62,7 +62,7 @@ public class Link implements SubCommand {
         player.sendMessage(miniMessage.parse(Config.GIVE_CODE, Template.of("code", authCode)));
         DiscordLink.getPlugin().getCache()
                 .cacheCode(player.getUniqueId(), authCode);
-        database.storeDataInCache(player, authCode, Utilities.getRankName(player), Utilities.isDonor(player));
+        database.storeDataInCache(player, authCode, Utilities.getRankName(player.getUniqueId()), Utilities.isDonor(player.getUniqueId()));
     }
 
     @Override

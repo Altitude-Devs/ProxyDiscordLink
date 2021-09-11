@@ -1,18 +1,20 @@
-package com.alttd.proxydiscordlink.bot;
+package com.alttd.proxydiscordlink.bot.listeners;
 
 import com.alttd.proxydiscordlink.DiscordLink;
+import com.alttd.proxydiscordlink.bot.Bot;
+import com.alttd.proxydiscordlink.bot.DiscordCommand;
 import com.alttd.proxydiscordlink.config.BotConfig;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Arrays;
 
-public class JDAListener extends ListenerAdapter {
+public class DiscordMessageListener extends ListenerAdapter {
 
     private DiscordLink plugin;
     private final Bot bot;
 
-    public JDAListener() {
+    public DiscordMessageListener() {
         plugin = DiscordLink.getPlugin();
         bot = plugin.getBot();
     }
