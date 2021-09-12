@@ -1,9 +1,7 @@
 package com.alttd.proxydiscordlink.database;
 
-import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.alttd.proxydiscordlink.util.ALogger;
-import com.alttd.proxydiscordlink.util.Cache;
 import com.alttd.proxydiscordlink.util.Utilities;
 import com.velocitypowered.api.proxy.Player;
 
@@ -11,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Database {
@@ -60,25 +57,6 @@ public class Database {
         }
     }
 
-    public void storeDataInCache(Player player, String code, String rank, boolean isDonor) {
-        String sql = "INSERT INTO cache (player_uuid, player_name, player_nickname, player_rank, player_isdonor, code) VALUES (?, ?, ?, ?, ?, ?)";
-
-        try {
-            PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
-
-            statement.setString(1, player.getUniqueId().toString());
-            statement.setString(2, player.getUsername());
-            statement.setString(3, getNick(player.getUniqueId()));
-            statement.setString(4, rank);
-            statement.setBoolean(5, isDonor);
-            statement.setString(6, code);
-            statement.execute();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-    }
-
     public void syncPlayer(DiscordLinkPlayer player) {
         try {
             String playerNickname = getNick(player.getUuid());
@@ -106,19 +84,6 @@ public class Database {
         }
     }
 
-    public boolean isInCache(Player player) { //TODO maybe this can be a map instead
-        try {
-            ResultSet resultSet = getStringResult("SELECT * FROM cache WHERE player_uuid = ?", player.getUniqueId().toString());
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return false;
-    }
-
     public boolean playerIsLinked(Player player) { //TODO maybe this can be using the discord api instead? (or a cache idk)
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
@@ -136,55 +101,16 @@ public class Database {
         return false;
     }
 
-    public void removeLinkedAccount(Player player) {
-        String discordId = "0";
-
-        try {
-            PreparedStatement statementSelect = DatabaseConnection.getConnection()
-                    .prepareStatement("SELECT * FROM linked_accounts WHERE player_uuid = '" + player.getUniqueId().toString() + "'");
-            ResultSet resultSet = statementSelect.executeQuery();
-
-            if (!resultSet.next()) {
-                ALogger.error("Unable to remove linked account for: " + player.getUsername() + " : " + player.getUniqueId());
-                return;
-            }
-
-            PreparedStatement statementInsert = DatabaseConnection.getConnection()
-                    .prepareStatement("INSERT INTO `updates` (`player_uuid`, `player_name`, `player_nickname`, `player_rank`, " +
-                            "`player_isdonor`, `player_isnitro`, `discord_username`, `discord_id`, " +
-                            "`discord_update`, `minecraft_update`) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE player_uuid = ?");
-
-            discordId = resultSet.getString("discord_id");
-
-            statementInsert.setString(1, resultSet.getString("player_uuid"));
-            statementInsert.setString(2, resultSet.getString("player_name"));
-            statementInsert.setString(3, resultSet.getString("player_nickname"));
-            statementInsert.setString(4, resultSet.getString("player_rank"));
-            statementInsert.setInt(5, resultSet.getInt("player_isdonor"));
-            statementInsert.setInt(6, resultSet.getInt("player_isnitro"));
-            statementInsert.setString(7, resultSet.getString("discord_username"));
-            statementInsert.setString(8, discordId);
-            statementInsert.setInt(9, 0);
-            statementInsert.setInt(10, 2);
-            statementInsert.setString(11, resultSet.getString("player_uuid"));
-
-            statementInsert.execute();
-            statementInsert.close();
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
+    public void removeLinkedAccount(DiscordLinkPlayer player) {
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
                     .prepareStatement("DELETE FROM linked_accounts WHERE player_uuid = ?");
-            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(1, player.getUuid().toString());
             statement.execute();
 
             statement = DatabaseConnection.getConnection()
                     .prepareStatement("DELETE FROM name_type WHERE discord_id = ?");
-            statement.setString(1, discordId);
+            statement.setLong(1, player.getUserId());
             statement.execute();
 
             statement.close();
@@ -192,34 +118,6 @@ public class Database {
             var2.printStackTrace();
         }
 
-    }
-
-    public void removePlayerFromCache(Player player) {
-        try {
-            PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("DELETE FROM cache WHERE player_uuid = '" + player.getUniqueId().toString() + "'");
-
-            statement.executeUpdate();
-            statement.close();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    public boolean hasDiscordNitro(Player player) {
-        try {
-            PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("SELECT * FROM linked_accounts WHERE player_uuid = '" + player.getUniqueId().toString() + "'");
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return resultSet.getInt("player_isnitro") == 1;
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return false;
     }
 
     public String uuidFromName(String playerName) {
@@ -307,15 +205,5 @@ public class Database {
             );
         }
         return null;
-    }
-
-    private ResultSet getStringResult(String query, String... parameters) throws SQLException {
-        PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(query);
-
-        for (int i = 1; i < parameters.length + 1; ++i) {
-            statement.setString(i, parameters[i - 1]);
-        }
-
-        return statement.executeQuery();
     }
 }

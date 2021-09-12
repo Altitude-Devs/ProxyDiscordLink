@@ -43,18 +43,19 @@ public class Link implements SubCommand {
             return;
         }
 
-        linkAccounts(player);
+        startLinkAccounts(player);
     }
 
-    private void linkAccounts(Player player) {
+    private void startLinkAccounts(Player player) {
         Database database = DiscordLink.getPlugin().getDatabase();
 
         if (database.playerIsLinked(player)) {
             player.sendMessage(miniMessage.parse(Config.ALREADY_LINKED_ACCOUNTS));
             return;
         }
-        if (database.isInCache(player)) {
+        if (DiscordLink.getPlugin().getCache().getCode(player.getUniqueId()) != null) {
             player.sendMessage(miniMessage.parse(Config.ALREADY_GOT_CODE));
+            return;
         }
 
         String authCode = Utilities.getAuthKey();
@@ -62,7 +63,6 @@ public class Link implements SubCommand {
         player.sendMessage(miniMessage.parse(Config.GIVE_CODE, Template.of("code", authCode)));
         DiscordLink.getPlugin().getCache()
                 .cacheCode(player.getUniqueId(), authCode);
-        database.storeDataInCache(player, authCode, Utilities.getRankName(player.getUniqueId()), Utilities.isDonor(player.getUniqueId()));
     }
 
     @Override

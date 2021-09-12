@@ -4,6 +4,7 @@ import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
+import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -54,7 +55,9 @@ public class Unlink implements SubCommand {
             return;
         }
 
-        database.removeLinkedAccount(player);
+        database.removeLinkedAccount(DiscordLinkPlayer.getDiscordLinkPlayer(player.getUniqueId()));
+        //TODO remove all discord synced roles from minecraft
+        //TODO remove all minecraft synced roles from discord
         player.sendMessage(miniMessage.parse(Config.UNLINKED_ACCOUNTS));
     }
 
