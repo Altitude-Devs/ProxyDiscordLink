@@ -16,7 +16,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class BotConfig {
@@ -184,6 +186,21 @@ public class BotConfig {
         SL_CLICKCOMMAND = getString("commands.staff-list.click-command", SL_CLICKCOMMAND);
     }
 
+    public static Map<Long, String> prefixMap = new HashMap<>();
+
+    private static void prefix() {
+        prefixMap.clear();
+        ConfigurationNode node = getNode("prefixes");
+        if (node.getChildrenMap().isEmpty()) {
+            ALogger.warn("No prefixes found in BotConfig, add them to use commands:\n" +
+                    "prefixes:\n\t" +
+                    "server_id: prefix");
+        }
+        node.getChildrenMap().forEach((key, value) -> {
+            prefixMap.put((Long) key, value.getString());
+        });
+    }
+
     private static void roles() {
         DiscordRole.cleanDiscordRoles();
         ConfigurationNode node = getNode("sync-roles");
@@ -195,18 +212,21 @@ public class BotConfig {
                     "luckperms-name: example\n\t\t" +
                     "display-name: Example Rank\n\t\t" +
                     "update-to-minecraft: true\n\t\t" +
+                    "update-to-discord: true\n\t\t" +
                     "announcement: <player> got example rank!");
         node.getChildrenMap().forEach((key, value) -> {
-                long id = value.getNode("role-id").getLong(-1);
-                String luckpermsName = value.getNode("luckperms-name").getString("example");
-                String display_name = value.getNode("display-name").getString("Example");
-                boolean updateToMinecraft = value.getNode("update-to-minecraft").getBoolean(false);
-                String announcement = value.getNode("announcement").getString("<player> got example rank!");
+            String internalName = value.getString();
+            long id = value.getNode("role-id").getLong(-1);
+            String luckpermsName = value.getNode("luckperms-name").getString("example");
+            String display_name = value.getNode("display-name").getString("Example");
+            boolean updateToMinecraft = value.getNode("update-to-minecraft").getBoolean(false);
+            boolean updateToDiscord = value.getNode("update-to-discord").getBoolean(false);
+            String announcement = value.getNode("announcement").getString("<player> got example rank!");
 
-                if (id == -1)
-                    ALogger.error("Invalid id in BotConfig for roles.");
-                else
-                    DiscordRole.addDiscordRole(new DiscordRole(id, luckpermsName, display_name, updateToMinecraft, announcement));
+            if (id == -1)
+                ALogger.error("Invalid id in BotConfig for roles.");
+            else
+                DiscordRole.addDiscordRole(new DiscordRole(internalName, id, luckpermsName, display_name, updateToMinecraft, updateToDiscord, announcement));
 
         });
     }
