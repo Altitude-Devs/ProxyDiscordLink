@@ -71,7 +71,7 @@ public class DiscordLink {
     }
 
     public void loadCommands() {// all (proxy)commands go here
-        server.getCommandManager().register("discord", new MinecraftCommand(), "discordlink");
+        server.getCommandManager().register("discord", new MinecraftCommand());
     }
 
     public void loadEvents() {
