@@ -1,6 +1,7 @@
 package com.alttd.proxydiscordlink.minecraft.commands.subcommands;
 
 import com.alttd.proxydiscordlink.DiscordLink;
+import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
@@ -10,6 +11,7 @@ import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Unlink implements SubCommand {
 
@@ -55,9 +57,19 @@ public class Unlink implements SubCommand {
             return;
         }
 
-        database.removeLinkedAccount(DiscordLinkPlayer.getDiscordLinkPlayer(player.getUniqueId()));
-        //TODO remove all discord synced roles from minecraft
-        //TODO remove all minecraft synced roles from discord
+        DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(player.getUniqueId());
+        database.removeLinkedAccount(discordLinkPlayer);
+        
+        discordLinkPlayer.updateDiscord(
+                DiscordRole.getDiscordRoles().stream()
+                        .filter(role -> discordLinkPlayer.getRoles().contains(role.getInternalName()))
+                        .collect(Collectors.toList()),
+                false);
+        discordLinkPlayer.updateMinecraft(
+                DiscordRole.getDiscordRoles().stream()
+                        .filter(role -> discordLinkPlayer.getRoles().contains(role.getInternalName()))
+                        .collect(Collectors.toList()),
+                false);
         player.sendMessage(miniMessage.parse(Config.UNLINKED_ACCOUNTS));
     }
 
