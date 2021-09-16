@@ -1,8 +1,8 @@
 package com.alttd.proxydiscordlink.minecraft.commands.subcommands;
 
 import com.alttd.proxydiscordlink.DiscordLink;
-import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.alttd.proxydiscordlink.config.Config;
+import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -11,6 +11,7 @@ import net.kyori.adventure.text.minimessage.Template;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CheckLinked implements SubCommand {
 
@@ -71,7 +72,7 @@ public class CheckLinked implements SubCommand {
 
     @Override
     public List<String> suggest(String[] args) {
-        return null;
+        return DiscordLink.getPlugin().getProxy().getAllPlayers().stream().map(Player::getUsername).collect(Collectors.toList());
     }
 
     @Override
