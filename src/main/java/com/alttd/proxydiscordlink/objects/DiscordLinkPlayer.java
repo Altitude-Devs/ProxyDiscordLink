@@ -3,12 +3,14 @@ package com.alttd.proxydiscordlink.objects;
 import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.BotConfig;
-import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Utilities;
-import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.node.types.InheritanceNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class DiscordLinkPlayer {
     private final long userId;
@@ -70,25 +72,25 @@ public class DiscordLinkPlayer {
 
         DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement
+        //TODO SYNC ROLES TO DATABASE
     }
 
     public void updateMinecraft(List<DiscordRole> roles, boolean added) {
-        User user = Utilities.getLuckPerms().getUserManager().getUser(getUuid());
-        if (user == null) {
-            ALogger.error("Tried updating a user luckperms couldn't find: " + getUuid());
-            return;
-        }
+        UserManager userManager = Utilities.getLuckPerms().getUserManager();
 
         roles.stream().filter(DiscordRole::isUpdateToMinecraft).forEach(role -> {
             InheritanceNode group = InheritanceNode.builder(role.getLuckpermsName()).build();
 
-            if (added && !user.getNodes().contains(group))
-                user.data().add(group);
-            else if (!added)
-                user.data().remove(group);
+            userManager.modifyUser(getUuid(), user -> {
+                if (added && !user.getNodes().contains(group))
+                    user.data().add(group);
+                else if (!added)
+                    user.data().remove(group);
+            });
         });
         DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement
+        //TODO SYNC ROLES TO DATABASE
     }
 
     public void linkedRole(boolean add) {
@@ -119,7 +121,7 @@ public class DiscordLinkPlayer {
         return discordLinkPlayers.stream()
                 .filter(discordLinkPlayer -> discordLinkPlayer.getUserId() == userId)
                 .findFirst()
-                .orElse(null);
+                .orElseGet(() -> DiscordLink.getPlugin().getDatabase().getPlayer(userId));
     }
 
     public static DiscordLinkPlayer getDiscordLinkPlayer(UUID uuid) {
