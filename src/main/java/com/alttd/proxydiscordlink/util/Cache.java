@@ -21,6 +21,13 @@ public class Cache {
         return playerCacheCode.get(uuid);
     }
 
+    public UUID getUUID(String code) {
+        return playerCacheCode.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(code))
+                .map(Map.Entry::getKey)
+                .findFirst().orElse(null);
+    }
+
     public void removeCachedPlayer(UUID uuid)
     {
         playerCacheCode.remove(uuid);
