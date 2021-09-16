@@ -34,7 +34,7 @@ public class DiscordBroadCast extends DiscordCommand {
 
     @Override
     public String getSyntax() {
-        return "!broadcast";
+        return "broadcast";
     }
 
     @Override

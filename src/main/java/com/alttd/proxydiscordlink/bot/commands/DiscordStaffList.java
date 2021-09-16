@@ -41,7 +41,7 @@ public class DiscordStaffList extends DiscordCommand {
 
     @Override
     public String getSyntax() {
-        return "!StaffList";
+        return "staffList";
     }
 
     @Override

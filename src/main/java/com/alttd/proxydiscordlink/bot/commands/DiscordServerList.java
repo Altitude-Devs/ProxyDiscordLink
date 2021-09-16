@@ -47,7 +47,7 @@ public class DiscordServerList extends DiscordCommand {
 
     @Override
     public String getSyntax() {
-        return "!serverlist";
+        return "serverlist";
     }
 
     @Override
