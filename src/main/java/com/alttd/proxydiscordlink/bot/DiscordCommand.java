@@ -1,9 +1,6 @@
 package com.alttd.proxydiscordlink.bot;
 
-import com.alttd.proxydiscordlink.bot.commands.DiscordLinkCommand;
-import com.alttd.proxydiscordlink.bot.commands.DiscordServerList;
-import com.alttd.proxydiscordlink.bot.commands.DiscordStaffList;
-import com.alttd.proxydiscordlink.bot.commands.DiscordUnlink;
+import com.alttd.proxydiscordlink.bot.commands.*;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
@@ -27,7 +24,8 @@ public abstract class DiscordCommand {
         loadCommand(new DiscordStaffList(),
                 new DiscordServerList(),
                 new DiscordLinkCommand(),
-                new DiscordUnlink()
+                new DiscordUnlink(),
+                new DiscordNick()
                );
     }
 
