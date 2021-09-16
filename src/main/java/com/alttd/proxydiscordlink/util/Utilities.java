@@ -1,9 +1,12 @@
 package com.alttd.proxydiscordlink.util;
 
 import com.alttd.proxydiscordlink.DiscordLink;
+import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.Config;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -11,6 +14,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.InheritanceNode;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -98,5 +102,33 @@ public class Utilities {
     public static void broadcast(String message) {
         ProxyServer server = DiscordLink.getPlugin().getProxy();
         server.sendMessage(miniMessage.parse(message));
+    }
+
+    public static List<DiscordRole> getDiscordRolesForUser(UUID uuid, Member member) {
+        User user = Utilities.getLuckPerms().getUserManager().getUser(uuid);
+        if (user == null) {
+            ALogger.error("Got null user from LuckPerms when processing " + uuid + " during linking.");
+            return null;
+        }
+
+        List<InheritanceNode> groups = user.getNodes().stream()
+                .filter(node -> node instanceof InheritanceNode)
+                .map(node -> (InheritanceNode) node)
+                .collect(Collectors.toList());
+        List<Role> roles = member.getRoles();
+
+        return DiscordRole.getDiscordRoles().stream()
+                .filter(discordRole -> {
+                    for (Role role : roles) {
+                        if (role.getIdLong() == discordRole.getId())
+                            return true;
+                    }
+                    for (InheritanceNode group : groups) {
+                        if (group.getGroupName().equals(discordRole.getLuckpermsName()))
+                            return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
 }
