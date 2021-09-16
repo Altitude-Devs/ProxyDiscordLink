@@ -1,8 +1,6 @@
 package com.alttd.proxydiscordlink.database;
 
-import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
-import com.alttd.proxydiscordlink.util.Utilities;
 import com.velocitypowered.api.proxy.Player;
 
 import java.sql.PreparedStatement;
@@ -18,12 +16,9 @@ public class Database {
         String linked_accounts = "CREATE TABLE IF NOT EXISTS linked_accounts (" +
                 "player_uuid VARCHAR(36) NOT NULL, " +
                 "player_name VARCHAR(16) NOT NULL, " +
-                "player_nickname VARCHAR(16), " +
-                "player_rank VARCHAR(256), " +
-                "player_isdonor BIT NOT NULL, " +
-                "player_isnitro BIT NOT NULL, " +
                 "discord_username VARCHAR(256) NOT NULL, " +
                 "discord_id VARCHAR(256) NOT NULL, " +
+                "nickname BIT DEFAULT b0" +
                 "PRIMARY KEY(player_uuid)" +
                 ");";
         String sync_roles = "CREATE TABLE IF NOT EXISTS account_roles (" +
@@ -53,11 +48,9 @@ public class Database {
     public void syncPlayer(DiscordLinkPlayer player) { //TODO make discord_id unique
         try {
             String playerNickname = getNick(player.getUuid());
-            String sql = "INSERT INTO updates " +
-                    "VALUES (?, ?, ?, ?, ?, ?) " +
+            String sql = "INSERT INTO linked_accounts " +
+                    "VALUES (?, ?, ?, ?) " +
                     "ON DUPLICATE KEY UPDATE player_name = ?" +
-                    "ON DUPLICATE KEY UPDATE player_nickname = ?" +
-                    "ON DUPLICATE KEY UPDATE player_rank = ?" +
                     "ON DUPLICATE KEY UPDATE discord_username = ?";
 
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
@@ -65,13 +58,11 @@ public class Database {
             statement.setString(1, player.getUuid().toString());
             statement.setString(2, player.getUsername());
             statement.setString(3, playerNickname);
-            statement.setString(4, Utilities.getRankName(player.getUuid()));
-            statement.setString(5, player.getDiscordUsername());
-            statement.setLong(6, player.getUserId());
-            statement.setString(7, player.getUsername());
-            statement.setString(8, playerNickname);
-            statement.setString(9, Utilities.getRankName(player.getUuid()));
-            statement.setString(10, player.getDiscordUsername());
+            statement.setString(4, player.getDiscordUsername());
+            statement.setLong(5, player.getUserId());
+            statement.setString(6, player.getUsername());
+            statement.setString(7, playerNickname);
+            statement.setString(8, player.getDiscordUsername());
 
             statement.execute();
         } catch (SQLException exception) {
@@ -197,6 +188,7 @@ public class Database {
                     UUID.fromString(resultSet.getString("player_uuid")),
                     resultSet.getString("player_name"),
                     resultSet.getString("discord_username"),
+                    resultSet.getInt("nickname") == 1,
                     new ArrayList<>()
             );
             addRoles(discordLinkPlayer);
