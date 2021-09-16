@@ -29,7 +29,7 @@ public class DiscordMessageListener extends ListenerAdapter {
         }
         if (event.getMessage().getChannel().getId().equals(BotConfig.COMMAND_CHANNEL)) {
             String content = event.getMessage().getContentRaw();
-            if (content.startsWith("!") && content.length() > 1) {
+            if (content.startsWith(BotConfig.prefixMap.get(event.getGuild().getIdLong())) && content.length() > 1) {
                 String[] split = content.split(" ");
                 String cmd = split[0].substring(1).toLowerCase();
                 String[] args = Arrays.copyOfRange(split, 1, split.length);
