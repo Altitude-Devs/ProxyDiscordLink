@@ -58,6 +58,7 @@ public class DiscordLinkCommand extends DiscordCommand {
                 uuid,
                 getUsername(uuid),
                 member.getUser().getName(),
+                false,
                 discordRoles.stream()
                         .map(DiscordRole::getInternalName)
                         .collect(Collectors.toList()));
