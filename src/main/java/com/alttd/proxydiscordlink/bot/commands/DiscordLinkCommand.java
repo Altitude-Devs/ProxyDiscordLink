@@ -87,6 +87,13 @@ public class DiscordLinkCommand extends DiscordCommand {
                         Utilities.getLuckPerms().getUserManager().getUser(discordLinkPlayer.getUuid()).getUsername() :
                         player.getUsername());
 
+        message.getChannel().sendMessage("You have successfully linked " +
+                discordLinkPlayer.getUsername() + " with " +
+                discordLinkPlayer.getDiscordUsername() + "!")
+                .queue(message1 -> message1.delete().queueAfter(5, TimeUnit.SECONDS));
+
+        DiscordLinkPlayer.addDiscordLinkPlayer(discordLinkPlayer);
+        DiscordLink.getPlugin().getCache().removeCachedPlayer(discordLinkPlayer.getUuid());
     }
 
     private String getUsername(UUID uuid) {
