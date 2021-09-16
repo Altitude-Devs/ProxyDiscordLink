@@ -37,7 +37,7 @@ public class DiscordUnlink extends DiscordCommand {
 
         Database database = DiscordLink.getPlugin().getDatabase();
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(member.getIdLong());
-        database.removeLinkedAccount(discordLinkPlayer);
+        database.removeLinkedAccount(discordLinkPlayer.getUuid());
 
         discordLinkPlayer.updateDiscord(
                 DiscordRole.getDiscordRoles().stream()
