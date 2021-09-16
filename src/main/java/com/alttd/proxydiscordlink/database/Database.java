@@ -1,7 +1,7 @@
 package com.alttd.proxydiscordlink.database;
 
+import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
-import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Utilities;
 import com.velocitypowered.api.proxy.Player;
 
@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Database {
@@ -25,58 +26,52 @@ public class Database {
                 "discord_id VARCHAR(256) NOT NULL, " +
                 "PRIMARY KEY(player_uuid)" +
                 ");";
-        String cache = "CREATE TABLE IF NOT EXISTS cache (" +
-                "player_uuid VARCHAR(36) NOT NULL, " +
-                "player_name VARCHAR(16) NOT NULL, " +
-                "player_nickname VARCHAR(16), " +
-                "player_rank VARCHAR(256), " +
-                "player_isdonor BIT NOT NULL, " +
-                "code VARCHAR(6) NOT NULL, " +
-                "PRIMARY KEY(player_uuid)" +
+        String sync_roles = "CREATE TABLE IF NOT EXISTS account_roles (" +
+                "uuid VARCHAR(36) NOT NULL, " +
+                "role_name VARCHAR(32) NOT NULL, " +
+                "PRIMARY KEY(uuid, role_name)" +
                 ");";
         String updates = "CREATE TABLE IF NOT EXISTS `updates` (" +
                 "`player_uuid` varchar(36) NOT NULL, " +
                 "`player_name` varchar(16) NOT NULL, " +
                 "`player_nickname` varchar(16) DEFAULT NULL, " +
                 "`player_rank` varchar(256) DEFAULT NULL, " +
-                "`player_isdonor` bit(1) DEFAULT b'0', " +
-                "`player_isnitro` bit(1) DEFAULT b'0', " +
                 "`discord_username` varchar(256) DEFAULT NULL, " +
                 "`discord_id` varchar(256) DEFAULT NULL, " +
-                "`discord_update` bit(2) NOT NULL DEFAULT b'0', " +
-                "`minecraft_update` bit(2) NOT NULL DEFAULT b'0', " +
                 "PRIMARY KEY (`player_uuid`)" +
                 ")";
         try {
             Statement statement = DatabaseConnection.getConnection().createStatement();
             statement.execute(linked_accounts);
-            statement.execute(cache);
+            statement.execute(sync_roles);
             statement.execute(updates);
         } catch (SQLException var3) {
             var3.printStackTrace();
         }
     }
 
-    public void syncPlayer(DiscordLinkPlayer player) {
+    public void syncPlayer(DiscordLinkPlayer player) { //TODO make discord_id unique
         try {
             String playerNickname = getNick(player.getUuid());
             String sql = "INSERT INTO updates " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 1) " +
-                    "ON DUPLICATE KEY UPDATE player_uuid = ?";
+                    "VALUES (?, ?, ?, ?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE player_name = ?" +
+                    "ON DUPLICATE KEY UPDATE player_nickname = ?" +
+                    "ON DUPLICATE KEY UPDATE player_rank = ?" +
+                    "ON DUPLICATE KEY UPDATE discord_username = ?";
 
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
-
-            String uuid = player.getUuid().toString();
 
             statement.setString(1, player.getUuid().toString());
             statement.setString(2, player.getUsername());
             statement.setString(3, playerNickname);
             statement.setString(4, Utilities.getRankName(player.getUuid()));
-            statement.setInt(5, player.isDonor() ? 1 : 0);
-            statement.setInt(6, player.isNitro() ? 1 : 0);
-            statement.setString(7, player.getDiscordUsername());
-            statement.setLong(8, player.getUserId());
-            statement.setString(9, uuid);
+            statement.setString(5, player.getDiscordUsername());
+            statement.setLong(6, player.getUserId());
+            statement.setString(7, player.getUsername());
+            statement.setString(8, playerNickname);
+            statement.setString(9, Utilities.getRankName(player.getUuid()));
+            statement.setString(10, player.getDiscordUsername());
 
             statement.execute();
         } catch (SQLException exception) {
@@ -155,6 +150,7 @@ public class Database {
 
     /**
      * Should only be used internally
+     *
      * @param user_id gets the player with this user id
      * @return null or the requested DiscordLinkPlayer
      */
@@ -177,6 +173,7 @@ public class Database {
 
     /**
      * Should only be used internally
+     *
      * @param uuid gets the player with this uuid
      * @return null or the requested DiscordLinkPlayer
      */
@@ -195,15 +192,33 @@ public class Database {
 
     private DiscordLinkPlayer getPlayer(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
-            return new DiscordLinkPlayer(
+            DiscordLinkPlayer discordLinkPlayer = new DiscordLinkPlayer(
                     resultSet.getLong("discord_id"),
                     UUID.fromString(resultSet.getString("player_uuid")),
                     resultSet.getString("player_name"),
                     resultSet.getString("discord_username"),
-                    resultSet.getInt("player_isdonor") == 1,
-                    resultSet.getInt("player_isnitro") == 1
+                    new ArrayList<>()
             );
+            addRoles(discordLinkPlayer);
+            return discordLinkPlayer;
         }
         return null;
+    }
+
+    private void addRoles(DiscordLinkPlayer discordLinkPlayer) {
+        try {
+            PreparedStatement statement = DatabaseConnection.getConnection()
+                    .prepareStatement("SELECT * FROM discord_link_roles WHERE uuid = ?");
+
+            statement.setString(1, discordLinkPlayer.getUuid().toString());
+            ResultSet resultSet = statement.getResultSet();
+
+            while (resultSet.next())
+            {
+                discordLinkPlayer.getRoles().add(resultSet.getString("internal_role_name"));
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 }
