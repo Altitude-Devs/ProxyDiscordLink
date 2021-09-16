@@ -1,16 +1,12 @@
 package com.alttd.proxydiscordlink.objects;
 
 import com.alttd.proxydiscordlink.DiscordLink;
-import com.alttd.proxydiscordlink.bot.api.DiscordModifyRole;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.BotConfig;
-import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Utilities;
 import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.NodeBuilder;
 import net.luckperms.api.node.types.InheritanceNode;
-import net.luckperms.api.node.types.PermissionNode;
 
 import java.util.*;
 
@@ -19,15 +15,13 @@ public class DiscordLinkPlayer {
     private final UUID uuid;
     private final String username;
     private final String discordUsername;
-    private boolean isDonor;
-    private boolean isNitro;
+    private final List<String> roleNames;
 
-    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean isDonor, boolean isNitro) {
+    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, List<String> roleNames) {
         this.userId = userId;
         this.uuid = uuid;
         this.username = username;
-        this.isDonor = isDonor;
-        this.isNitro = isNitro;
+        this.roleNames = roleNames;
         this.discordUsername = discordUsername;
     }
 
@@ -43,12 +37,8 @@ public class DiscordLinkPlayer {
         return username;
     }
 
-    public boolean isDonor() {
-        return isDonor;
-    }
-
-    public boolean isNitro() {
-        return isNitro;
+    public List<String> getRoles() {
+        return roleNames;
     }
 
     public String getDiscordUsername() {
@@ -56,16 +46,10 @@ public class DiscordLinkPlayer {
     }
 
     public void updateDiscord(List<DiscordRole> roles, boolean added) {
-        for (DiscordRole role : roles) {
-            if (role.getDisplayName().equalsIgnoreCase("nitro"))
-                isNitro = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
-            if (List.of("viceroy", "count", "duke", "archduke").contains(role.getDisplayName().toLowerCase()))
-                isDonor = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
-            if (!role.isUpdateToMinecraft())
-                continue;
-            //TODO implement
-        }
-        roles.forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
+        if (added)
+            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
+        else
+            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().removeRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
 
         DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement
@@ -78,22 +62,23 @@ public class DiscordLinkPlayer {
             return;
         }
 
-        for (DiscordRole role : roles) {
-            if (role.getDisplayName().equalsIgnoreCase("nitro"))
-                isNitro = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
-            if (List.of("viceroy", "count", "duke", "archduke").contains(role.getDisplayName().toLowerCase()))
-                isDonor = added; //FIXME this should be a list instead of a bool (separate table for roles they have)
-            if (!role.isUpdateToMinecraft())
-                continue;
+        roles.stream().filter(DiscordRole::isUpdateToMinecraft).forEach(role -> {
             InheritanceNode group = InheritanceNode.builder(role.getLuckpermsName()).build();
 
-            if (!user.getNodes().contains(group) && added)
+            if (added && !user.getNodes().contains(group))
                 user.data().add(group);
             else if (!added)
                 user.data().remove(group);
-        }
+        });
         DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement
+    }
+
+    public void linkedRole(boolean add) {
+        if (add)
+            DiscordLink.getPlugin().getBot().addRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID); //TODO test
+        else
+            DiscordLink.getPlugin().getBot().removeRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID); //TODO test
     }
 
     //Static stuff
