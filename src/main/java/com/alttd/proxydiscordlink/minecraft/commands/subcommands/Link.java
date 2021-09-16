@@ -10,6 +10,7 @@ import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.Template;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Link implements SubCommand {
@@ -67,7 +68,7 @@ public class Link implements SubCommand {
 
     @Override
     public List<String> suggest(String[] args) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
