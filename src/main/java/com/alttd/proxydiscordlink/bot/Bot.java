@@ -3,6 +3,7 @@ package com.alttd.proxydiscordlink.bot;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
+import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -11,6 +12,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
@@ -120,6 +122,22 @@ public class Bot {
         if (member == null)
             return false;
         guild.removeRoleFromMember(member, role).queue();
+        return true;
+    }
+
+    public boolean changeNick(long guildId, long userId, String nickname) {
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null)
+            return false;
+        Member member = guild.getMemberById(userId);
+        if (member == null)
+            return false;
+        try {
+            guild.modifyNickname(member, nickname).queue();
+        } catch (HierarchyException ignored){
+            ALogger.warn("I can't modify the nickname of those above me.");
+            return false;
+        }
         return true;
     }
 }
