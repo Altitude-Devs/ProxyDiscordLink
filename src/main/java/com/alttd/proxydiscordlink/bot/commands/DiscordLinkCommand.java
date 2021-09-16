@@ -78,12 +78,14 @@ public class DiscordLinkCommand extends DiscordCommand {
                 true);
 
         discordLinkPlayer.linkedRole(true);
-        try {
-            Player player = DiscordLink.getPlugin().getProxy().getPlayer(discordLinkPlayer.getUuid()).orElse(null);
-            message.getMember().modifyNickname(player == null ? Utilities.getLuckPerms().getUserManager().getUser(discordLinkPlayer.getUuid()).getUsername() : player.getUsername()).queue();
-        } catch (HierarchyException e){
-            message.getTextChannel().sendMessage("I can't modify the nickname of those above me.").queue();
-        }
+        Player player = DiscordLink.getPlugin().getProxy().getPlayer(discordLinkPlayer.getUuid()).orElse(null);
+        DiscordLink.getPlugin().getBot().changeNick(
+                message.getGuild().getIdLong(),
+                message.getMember().getIdLong(),
+                player == null ?
+                        Utilities.getLuckPerms().getUserManager().getUser(discordLinkPlayer.getUuid()).getUsername() :
+                        player.getUsername());
+
     }
 
     private String getUsername(UUID uuid) {
