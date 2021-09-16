@@ -3,6 +3,7 @@ package com.alttd.proxydiscordlink.minecraft.commands.subcommands;
 import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.velocitypowered.api.command.CommandSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sync implements SubCommand { //TODO implement
@@ -23,7 +24,7 @@ public class Sync implements SubCommand { //TODO implement
 
     @Override
     public List<String> suggest(String[] args) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

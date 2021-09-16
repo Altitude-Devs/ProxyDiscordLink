@@ -10,6 +10,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,8 @@ public class Unlink implements SubCommand {
         }
 
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(player.getUniqueId());
-        database.removeLinkedAccount(discordLinkPlayer);
-        
+        database.removeLinkedAccount(discordLinkPlayer.getUuid());
+
         discordLinkPlayer.updateDiscord(
                 DiscordRole.getDiscordRoles().stream()
                         .filter(role -> discordLinkPlayer.getRoles().contains(role.getInternalName()))
@@ -75,7 +76,7 @@ public class Unlink implements SubCommand {
 
     @Override
     public List<String> suggest(String[] args) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
