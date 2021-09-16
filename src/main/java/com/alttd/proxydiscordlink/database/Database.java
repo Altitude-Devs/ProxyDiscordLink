@@ -14,55 +14,50 @@ public class Database {
 
     public void createTables() {
         String linked_accounts = "CREATE TABLE IF NOT EXISTS linked_accounts (" +
-                "player_uuid VARCHAR(36) NOT NULL, " +
-                "player_name VARCHAR(16) NOT NULL, " +
-                "discord_username VARCHAR(256) NOT NULL, " +
-                "discord_id VARCHAR(256) NOT NULL, " +
-                "nickname BIT DEFAULT b0" +
+                "`player_uuid` VARCHAR(36) NOT NULL, " +
+                "`player_name` VARCHAR(16) NOT NULL, " +
+                "`discord_username` VARCHAR(256) NOT NULL, " +
+                "`discord_id` BIGINT NOT NULL, " +
+                "`nickname` BIT DEFAULT b'0', " +
+                "UNIQUE(discord_id), " +
                 "PRIMARY KEY(player_uuid)" +
                 ");";
         String sync_roles = "CREATE TABLE IF NOT EXISTS account_roles (" +
-                "uuid VARCHAR(36) NOT NULL, " +
-                "role_name VARCHAR(32) NOT NULL, " +
+                "`uuid` VARCHAR(36) NOT NULL, " +
+                "`role_name` VARCHAR(32) NOT NULL, " +
                 "PRIMARY KEY(uuid, role_name)" +
                 ");";
-        String updates = "CREATE TABLE IF NOT EXISTS `updates` (" +
-                "`player_uuid` varchar(36) NOT NULL, " +
-                "`player_name` varchar(16) NOT NULL, " +
-                "`player_nickname` varchar(16) DEFAULT NULL, " +
-                "`player_rank` varchar(256) DEFAULT NULL, " +
-                "`discord_username` varchar(256) DEFAULT NULL, " +
-                "`discord_id` varchar(256) DEFAULT NULL, " +
-                "PRIMARY KEY (`player_uuid`)" +
-                ")";
         try {
             Statement statement = DatabaseConnection.getConnection().createStatement();
             statement.execute(linked_accounts);
             statement.execute(sync_roles);
-            statement.execute(updates);
-        } catch (SQLException var3) {
-            var3.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
-    public void syncPlayer(DiscordLinkPlayer player) { //TODO make discord_id unique
+    public void syncPlayer(DiscordLinkPlayer player) {
         try {
-            String playerNickname = getNick(player.getUuid());
             String sql = "INSERT INTO linked_accounts " +
-                    "VALUES (?, ?, ?, ?) " +
+                    "VALUES (?, ?, ?, ?, ?) " +
                     "ON DUPLICATE KEY UPDATE player_name = ?" +
-                    "ON DUPLICATE KEY UPDATE discord_username = ?";
+                    "ON DUPLICATE KEY UPDATE discord_username = ?" +
+                    "ON DUPLICATE KEY UPDATE discord_id = ?" +
+                    "ON DUPLICATE KEY UPDATE nickname = ?";
 
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
 
+            //Insert
             statement.setString(1, player.getUuid().toString());
             statement.setString(2, player.getUsername());
-            statement.setString(3, playerNickname);
-            statement.setString(4, player.getDiscordUsername());
-            statement.setLong(5, player.getUserId());
+            statement.setString(3, player.getDiscordUsername());
+            statement.setLong(4, player.getUserId());
+            statement.setInt(5, player.hasNick() ? 1 : 0);
+            //Update
             statement.setString(6, player.getUsername());
-            statement.setString(7, playerNickname);
-            statement.setString(8, player.getDiscordUsername());
+            statement.setString(7, player.getDiscordUsername());
+            statement.setLong(8, player.getUserId());
+            statement.setInt(9, player.hasNick() ? 1 : 0);
 
             statement.execute();
         } catch (SQLException exception) {
