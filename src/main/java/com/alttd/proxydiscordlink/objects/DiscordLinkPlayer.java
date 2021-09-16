@@ -13,11 +13,12 @@ import java.util.*;
 public class DiscordLinkPlayer {
     private final long userId;
     private final UUID uuid;
-    private final String username;
-    private final String discordUsername;
+    private String username;
+    private String discordUsername;
+    private boolean nick;
     private final List<String> roleNames;
 
-    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, List<String> roleNames) {
+    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, List<String> roleNames) {
         this.userId = userId;
         this.uuid = uuid;
         this.username = username;
@@ -37,12 +38,28 @@ public class DiscordLinkPlayer {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public List<String> getRoles() {
         return roleNames;
     }
 
     public String getDiscordUsername() {
         return discordUsername;
+    }
+
+    public void setDiscordUsername(String discordUsername) {
+        this.discordUsername = discordUsername;
+    }
+
+    public boolean hasNick() {
+        return nick;
+    }
+
+    public void setNick(boolean nick) {
+        this.nick = nick;
     }
 
     public void updateDiscord(List<DiscordRole> roles, boolean added) {
