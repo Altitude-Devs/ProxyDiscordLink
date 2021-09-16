@@ -55,12 +55,19 @@ public class MinecraftCommand implements SimpleCommand {
         List<String> suggest = new ArrayList<>();
 
         if (args.length == 0) {
-            subCommands.forEach(subCommand -> suggest.add(subCommand.getName()));
+            subCommands.stream()
+                    .filter(subCommand -> invocation.source().hasPermission(subCommand.getPermission()))
+                    .forEach(subCommand -> suggest.add(subCommand.getName()));
         } else if (args.length <= 1) {
-            subCommands.stream().filter(subCommand -> subCommand.getName().startsWith(args[0].toLowerCase()))
+            subCommands.stream()
+                    .filter(subCommand -> invocation.source().hasPermission(subCommand.getPermission()))
+                    .filter(subCommand -> subCommand.getName().startsWith(args[0].toLowerCase()))
                     .forEach(subCommand -> suggest.add(subCommand.getName()));
         } else {
-            subCommands.stream().filter(subCommand -> subCommand.getName().equalsIgnoreCase(args[0])).findFirst()
+            subCommands.stream()
+                    .filter(subCommand -> invocation.source().hasPermission(subCommand.getPermission()))
+                    .filter(subCommand -> subCommand.getName().equalsIgnoreCase(args[0]))
+                    .findFirst()
                     .ifPresent(subCommand -> suggest.addAll(subCommand.suggest(args)));
         }
 
