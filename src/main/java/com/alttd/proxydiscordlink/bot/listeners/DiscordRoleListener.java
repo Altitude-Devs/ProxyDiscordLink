@@ -73,7 +73,7 @@ public class DiscordRoleListener extends ListenerAdapter {
         if (removed_roles.isEmpty())
             return;
 
-        DiscordLink.getPlugin().getDatabase().getPlayer(event.getUser().getIdLong())
+        DiscordLinkPlayer.getDiscordLinkPlayer(event.getUser().getIdLong())
                 .updateMinecraft(removed_roles, false);
     }
 }
