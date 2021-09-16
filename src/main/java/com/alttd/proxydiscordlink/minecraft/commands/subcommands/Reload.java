@@ -6,6 +6,7 @@ import com.alttd.proxydiscordlink.config.Config;
 import com.velocitypowered.api.command.CommandSource;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Reload implements SubCommand {
@@ -38,7 +39,7 @@ public class Reload implements SubCommand {
 
     @Override
     public List<String> suggest(String[] args) {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
