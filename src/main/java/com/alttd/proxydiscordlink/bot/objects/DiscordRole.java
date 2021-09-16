@@ -25,6 +25,10 @@ public class DiscordRole {
         this.announcement = announcement;
     }
 
+    public String getInternalName() {
+        return internalName;
+    }
+
     public long getId() {
         return id;
     }
