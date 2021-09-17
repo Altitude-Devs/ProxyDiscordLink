@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class DiscordMessageListener extends ListenerAdapter {
 
@@ -27,7 +28,7 @@ public class DiscordMessageListener extends ListenerAdapter {
         if (event.isWebhookMessage()) {
             return;
         }
-        if (event.getMessage().getChannel().getId().equals(BotConfig.COMMAND_CHANNEL)) {
+        if (event.getMessage().getChannel().getIdLong() == BotConfig.LINK_CHANNEL) {
             String content = event.getMessage().getContentRaw();
             if (content.startsWith(BotConfig.prefixMap.get(event.getGuild().getIdLong())) && content.length() > 1) {
                 String[] split = content.split(" ");
@@ -41,6 +42,18 @@ public class DiscordMessageListener extends ListenerAdapter {
                         // TODO permission check? do we need this?
                     }
                     command.handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args);
+                }
+            }
+        }
+        if (event.getMessage().getChannel().getIdLong() == BotConfig.LINK_CHANNEL) {
+            String content = event.getMessage().getContentRaw();
+            String[] split = content.split(" ");
+            String cmd = split[0].substring(1).toLowerCase();
+            String[] args = Arrays.copyOfRange(split, 1, split.length);
+            if (cmd.equalsIgnoreCase("link")) {
+                Optional<DiscordCommand> link = DiscordCommand.getCommands().stream().filter(discordCommand -> discordCommand.getCommand().equals("link")).findFirst();
+                if (!link.isEmpty()) {
+                    link.get().handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args);
                 }
             }
         }

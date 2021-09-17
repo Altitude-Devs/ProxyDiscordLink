@@ -53,7 +53,7 @@ public class Bot {
         }
     }
 
-    public void sendMessageToDiscord(String channelid, String message) {
+    public void sendMessageToDiscord(long channelid, String message) {
         //sendMessageToDiscord(client.getTextChannelById(channel), message, blocking);
         TextChannel channel = jda.getTextChannelById(channelid);
         if (jda == null) return;
@@ -74,7 +74,7 @@ public class Bot {
         }
     }
 
-    public void sendEmbedToDiscord(String channelid, EmbedBuilder embedBuilder, long secondsTillDelete) {
+    public void sendEmbedToDiscord(long channelid, EmbedBuilder embedBuilder, long secondsTillDelete) {
         //sendMessageToDiscord(client.getTextChannelById(channel), message, blocking);
         TextChannel channel = jda.getTextChannelById(channelid);
         if (jda == null) return;

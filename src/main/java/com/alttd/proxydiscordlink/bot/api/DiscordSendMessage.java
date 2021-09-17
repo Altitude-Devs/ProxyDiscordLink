@@ -7,14 +7,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.awt.*;
 
 public class DiscordSendMessage {
-    public static void sendMessage(String channelId, String message)
+    public static void sendMessage(long channelId, String message)
     {
         Bot bot = DiscordLink.getPlugin().getBot();
 
         bot.sendMessageToDiscord(channelId, message);
     }
 
-    public static void sendEmbed(String channelId, String title, String description)
+    public static void sendEmbed(long channelId, String title, String description)
     {
         Bot bot = DiscordLink.getPlugin().getBot();
         EmbedBuilder embedBuilder = new EmbedBuilder();

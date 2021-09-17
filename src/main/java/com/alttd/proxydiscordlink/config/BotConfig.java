@@ -167,13 +167,15 @@ public class BotConfig {
      **/
 
     public static String BOT_TOKEN = "unconfigured";
-    public static String COMMAND_CHANNEL = "unconfigured";
+    public static long COMMAND_CHANNEL = -1;
+    public static long LINK_CHANNEL = -1;
     public static long GUILD_ID = -1;
     public static long LINKED_ROLE_ID = -1;
 
     private static void settings() {
         BOT_TOKEN = getString("settings.token", BOT_TOKEN);
-        COMMAND_CHANNEL = getString("settings.command_channel", COMMAND_CHANNEL);
+        COMMAND_CHANNEL = getLong("settings.command-channel", COMMAND_CHANNEL);
+        LINK_CHANNEL = getLong("settings.link-channel", LINK_CHANNEL);
         GUILD_ID = getLong("settings.guild-id", GUILD_ID);
         LINKED_ROLE_ID = getLong("settings.linked-role-id", LINKED_ROLE_ID);
     }
