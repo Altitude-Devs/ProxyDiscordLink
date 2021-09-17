@@ -38,6 +38,10 @@ public class DiscordUnlink extends DiscordCommand {
 
         Database database = DiscordLink.getPlugin().getDatabase();
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(member.getIdLong());
+        if (discordLinkPlayer == null) {
+            message.getChannel().sendMessage("Your accounts aren't linked.").queue();
+            return;
+        }
         database.removeLinkedAccount(discordLinkPlayer.getUuid());
 
         discordLinkPlayer.updateDiscord(
@@ -51,7 +55,6 @@ public class DiscordUnlink extends DiscordCommand {
                         .collect(Collectors.toList()),
                 false);
         discordLinkPlayer.linkedRole(false);
-        message.getChannel().sendMessage("Your Discord and Minecraft accounts have been unlinked.")
-                .queue(m -> m.delete().queueAfter(15, TimeUnit.SECONDS));
+        message.getChannel().sendMessage("Your Discord and Minecraft accounts have been unlinked.").queue();
     }
 }
