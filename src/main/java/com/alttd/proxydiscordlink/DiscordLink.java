@@ -8,6 +8,7 @@ import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.database.DatabaseConnection;
 import com.alttd.proxydiscordlink.minecraft.listeners.LuckpermsEvents;
 import com.alttd.proxydiscordlink.minecraft.listeners.PlayerLeave;
+import com.alttd.proxydiscordlink.minecraft.listeners.WhitelistKick;
 import com.alttd.proxydiscordlink.util.ALogger;
 import com.alttd.proxydiscordlink.util.Cache;
 import com.google.inject.Inject;
@@ -76,6 +77,7 @@ public class DiscordLink {
 
     public void loadEvents() {
         server.getEventManager().register(this, new PlayerLeave());
+        server.getEventManager().register(this, new WhitelistKick());
         new LuckpermsEvents().listener();
     }
 

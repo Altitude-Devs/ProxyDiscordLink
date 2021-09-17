@@ -44,6 +44,8 @@ dependencies {
     compileOnly("net.luckperms:api:5.3")
     // MySQL
     runtimeOnly("mysql:mysql-connector-java:8.0.23")
+    // ShutdownInfo
+    compileOnly("org.example:ShutdownInfo:1.0-SNAPSHOT")
 }
 
 tasks {
