@@ -8,6 +8,7 @@ import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class DiscordUnlink extends DiscordCommand {
@@ -50,5 +51,7 @@ public class DiscordUnlink extends DiscordCommand {
                         .collect(Collectors.toList()),
                 false);
         discordLinkPlayer.linkedRole(false);
+        message.getChannel().sendMessage("Your Discord and Minecraft accounts have been unlinked.")
+                .queue(m -> m.delete().queueAfter(15, TimeUnit.SECONDS));
     }
 }
