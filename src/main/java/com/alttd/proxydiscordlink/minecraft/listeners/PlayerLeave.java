@@ -9,6 +9,8 @@ public class PlayerLeave {
 
     @Subscribe(order = PostOrder.LATE)
     public void playerDisconnect(DisconnectEvent event) {
+        if (event.getLoginStatus().equals(DisconnectEvent.LoginStatus.CANCELLED_BY_PROXY))
+            return;
         DiscordLink.getPlugin().getCache().removeCachedPlayer(event.getPlayer().getUniqueId());
     }
 
