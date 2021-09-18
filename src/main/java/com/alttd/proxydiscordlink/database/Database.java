@@ -88,17 +88,14 @@ public class Database {
     public void removeLinkedAccount(UUID uuid) {
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("DELETE FROM linked_accounts WHERE player_uuid = ?");
+                    .prepareStatement("DELETE FROM linked_accounts WHERE discord_id = ?");
             statement.setString(1, uuid.toString());
-            statement.execute();
-            statement.close();
+            statement.executeUpdate();
 
-            statement = DatabaseConnection.getConnection()
-                    .prepareStatement("DELETE FROM account_roles WHERE uuid = ?");
-            statement.setString(1, uuid.toString());
-            statement.execute();
-
-            statement.close();
+            PreparedStatement statement2 = DatabaseConnection.getConnection()
+                    .prepareStatement("DELETE FROM account_roles WHERE discord_id = ?");
+            statement2.setString(1, uuid.toString());
+            statement2.executeUpdate();
         } catch (SQLException var2) {
             var2.printStackTrace();
         }
