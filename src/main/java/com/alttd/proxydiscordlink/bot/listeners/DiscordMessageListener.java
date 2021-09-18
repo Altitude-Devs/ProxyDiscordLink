@@ -44,8 +44,7 @@ public class DiscordMessageListener extends ListenerAdapter {
                     command.handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args);
                 }
             }
-        }
-        if (event.getMessage().getChannel().getIdLong() == BotConfig.LINK_CHANNEL) {
+        } else if (event.getMessage().getChannel().getIdLong() == BotConfig.LINK_CHANNEL) {
             String content = event.getMessage().getContentRaw();
             String[] split = content.split(" ");
             String cmd = split[0].substring(1).toLowerCase();
