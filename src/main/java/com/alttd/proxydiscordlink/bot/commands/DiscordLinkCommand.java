@@ -50,6 +50,7 @@ public class DiscordLinkCommand extends DiscordCommand {
             return;
 
         List<DiscordRole> discordRoles = Utilities.getDiscordRolesForUser(uuid, member);
+        List<DiscordRole> minecraftRanks = Utilities.getMinecraftRolesForUser(uuid);
         if (discordRoles == null)
             return;
 

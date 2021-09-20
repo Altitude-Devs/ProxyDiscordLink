@@ -14,10 +14,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.InheritanceNode;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utilities {
@@ -130,5 +127,22 @@ public class Utilities {
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static List<DiscordRole> getMinecraftRolesForUser(UUID uuid) {
+        User user = getLuckPerms().getUserManager().getUser(uuid);
+        List<DiscordRole> roles = new ArrayList<>();
+        if (user == null)
+            return roles;
+
+        user.getNodes().stream()
+                .filter(node -> node instanceof InheritanceNode)
+                .map(node -> ((InheritanceNode) node).getGroupName())
+                .collect(Collectors.toList())
+                .forEach(lpName -> DiscordRole.getDiscordRoles().stream()
+                        .filter(discordRole -> discordRole.getLuckpermsName().equals(lpName))
+                        .findFirst()
+                        .ifPresent(roles::add));
+        return roles;
     }
 }

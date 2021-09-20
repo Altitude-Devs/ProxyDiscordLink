@@ -87,7 +87,7 @@ public class Bot {
 
         if (embedBuilder.isEmpty()) return;
         try {
-            if (secondsTillDelete < 0){
+            if (secondsTillDelete < 0) {
                 channel.sendMessage(embedBuilder.build()).queue();
             } else {
                 channel.sendMessage(embedBuilder.build()).queue(message -> message.delete().queueAfter(secondsTillDelete, TimeUnit.SECONDS));
@@ -97,32 +97,42 @@ public class Bot {
         }
     }
 
-    public boolean addRole(long userId, long roleId, long guildId) {
+    public void addRole(long userId, long roleId, long guildId) {
         Guild guild = jda.getGuildById(guildId);
         if (guild == null)
-            return false;
+            return;
         Role role = guild.getRoleById(roleId);
         if (role == null)
-            return false;
+            return;
         Member member = guild.getMemberById(userId);
-        if (member == null)
-            return false;
-        guild.addRoleToMember(member, role).queue();
-        return true;
+        if (member == null) {
+            guild.retrieveMemberById(userId).queue(m -> addRole(guild, m, role));
+            return;
+        }
+        addRole(guild, member, role);
     }
 
-    public boolean removeRole(long userId, long roleId, long guildId) {
+    private void addRole(Guild guild, Member member, Role role) {
+        guild.addRoleToMember(member, role).queue();
+    }
+
+    public void removeRole(long userId, long roleId, long guildId) {
         Guild guild = jda.getGuildById(guildId);
         if (guild == null)
-            return false;
+            return;
         Role role = guild.getRoleById(roleId);
         if (role == null)
-            return false;
+            return;
         Member member = guild.getMemberById(userId);
-        if (member == null)
-            return false;
+        if (member == null) {
+            guild.retrieveMemberById(userId).queue(m -> removeRole(guild, m, role));
+            return;
+        }
+        removeRole(guild, member, role);
+    }
+
+    private void removeRole(Guild guild, Member member, Role role) {
         guild.removeRoleFromMember(member, role).queue();
-        return true;
     }
 
     public boolean changeNick(long guildId, long userId, String nickname) {
@@ -134,7 +144,7 @@ public class Bot {
             return false;
         try {
             guild.modifyNickname(member, nickname).queue();
-        } catch (HierarchyException ignored){
+        } catch (HierarchyException ignored) {
             ALogger.warn("I can't modify the nickname of those above me.");
             return false;
         }

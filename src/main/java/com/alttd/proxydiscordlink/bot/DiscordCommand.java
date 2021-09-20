@@ -21,11 +21,11 @@ public abstract class DiscordCommand {
     public static void loadCommands() {
         commands = new ArrayList<>();
 
-        loadCommand(new DiscordStaffList(),
-                new DiscordServerList(),
-                new DiscordLinkCommand(),
+        loadCommand(new DiscordLinkCommand(),
                 new DiscordUnlink(),
                 new DiscordNick()
+//                new DiscordStaffList(),
+//                new DiscordServerList(),
                );
     }
 

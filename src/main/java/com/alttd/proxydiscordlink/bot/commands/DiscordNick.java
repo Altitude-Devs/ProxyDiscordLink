@@ -50,6 +50,8 @@ public class DiscordNick extends DiscordCommand {
             case "username" -> {
                 member.modifyNickname(discordLinkPlayer.getUsername()).queue();
                 channel.sendMessage("Your nickname has been set to `" + discordLinkPlayer.getUsername() + "`.").queue();
+                discordLinkPlayer.setNick(false);
+                DiscordLink.getPlugin().getDatabase().syncPlayer(discordLinkPlayer);
             }
             case "nickname" -> {
                 String nick = DiscordLink.getPlugin().getDatabase().getNick(discordLinkPlayer.getUuid());
@@ -57,6 +59,8 @@ public class DiscordNick extends DiscordCommand {
                     nick = discordLinkPlayer.getUsername();
                 member.modifyNickname(nick).queue();
                 channel.sendMessage("Your nickname has been set to `" + nick + "`.").queue();
+                discordLinkPlayer.setNick(true);
+                DiscordLink.getPlugin().getDatabase().syncPlayer(discordLinkPlayer);
             }
             default -> channel.sendMessage("The correct syntax is: `" +
                     BotConfig.prefixMap.get(message.getGuild().getIdLong()) +

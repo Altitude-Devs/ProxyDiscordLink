@@ -34,6 +34,7 @@ public class DiscordRoleListener extends ListenerAdapter {
     @Override
     public void onGuildMemberRoleAdd(@NotNull GuildMemberRoleAddEvent event) {
         List<DiscordRole> added_roles = DiscordRole.getDiscordRoles().stream()
+                .filter(DiscordRole::isUpdateToMinecraft)
                 .filter(discordRole -> event.getRoles().stream()
                         .anyMatch(role -> role.getIdLong() == discordRole.getId()))
                 .collect(Collectors.toList());
