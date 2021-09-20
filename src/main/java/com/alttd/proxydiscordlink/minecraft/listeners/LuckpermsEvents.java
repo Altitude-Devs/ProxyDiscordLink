@@ -42,6 +42,7 @@ public class LuckpermsEvents {
             return;
 
         discordLinkPlayer.updateDiscord(List.of(optional.get()), added);
+        DiscordLink.getPlugin().getDatabase().syncRoles(discordLinkPlayer);
     }
 
 }

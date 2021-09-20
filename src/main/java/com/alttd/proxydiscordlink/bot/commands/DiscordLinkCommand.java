@@ -94,6 +94,7 @@ public class DiscordLinkCommand extends DiscordCommand {
 
         DiscordLinkPlayer.addDiscordLinkPlayer(discordLinkPlayer);
         DiscordLink.getPlugin().getDatabase().syncPlayer(discordLinkPlayer);
+        DiscordLink.getPlugin().getDatabase().syncRoles(discordLinkPlayer);
         DiscordLink.getPlugin().getCache().removeCachedPlayer(discordLinkPlayer.getUuid());
     }
 

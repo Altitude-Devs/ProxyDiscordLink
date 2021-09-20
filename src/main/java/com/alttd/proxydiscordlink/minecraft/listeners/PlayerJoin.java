@@ -11,7 +11,7 @@ public class PlayerJoin {
 
     @Subscribe(order = PostOrder.LATE)
     public void playerConnected(ServerConnectedEvent event) {
-        if (event.getPreviousServer().isEmpty())
+        if (event.getPreviousServer().isPresent())
             return;
 
         boolean sync = false;

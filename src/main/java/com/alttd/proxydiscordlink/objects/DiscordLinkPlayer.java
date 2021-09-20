@@ -66,11 +66,9 @@ public class DiscordLinkPlayer {
 
     public void updateDiscord(List<DiscordRole> roles, boolean added) {
         if (added)
-            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
+            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID));
         else
-            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().removeRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
-        //TODO implement
-        //TODO SYNC ROLES TO DATABASE
+            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().removeRole(userId, role.getId(), BotConfig.GUILD_ID));
     }
 
     public void updateMinecraft(List<DiscordRole> roles, boolean added) {
@@ -86,15 +84,13 @@ public class DiscordLinkPlayer {
                     user.data().remove(group);
             });
         });
-        //TODO implement
-        //TODO SYNC ROLES TO DATABASE
     }
 
     public void linkedRole(boolean add) {
         if (add)
-            DiscordLink.getPlugin().getBot().addRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID); //TODO test
+            DiscordLink.getPlugin().getBot().addRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID);
         else
-            DiscordLink.getPlugin().getBot().removeRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID); //TODO test
+            DiscordLink.getPlugin().getBot().removeRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID);
     }
 
     //Static stuff

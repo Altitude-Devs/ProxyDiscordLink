@@ -68,6 +68,43 @@ public class Database {
         }
     }
 
+    public void syncRoles(DiscordLinkPlayer player) {
+        //Delete all roles
+        try {
+            String sql = "DELETE FROM account_roles WHERE uuid = ?";
+
+            PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+            statement.setString(1, player.getUuid().toString());
+            statement.execute();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        //Add all roles back
+        try {
+            String sql = "INSERT INTO account_roles " +
+                    "VALUES (?, ?) " +
+                    "ON DUPLICATE KEY UPDATE " +
+                    "uuid = ?, " +
+                    "role_name = ?";
+
+            PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+
+            statement.setString(1, player.getUuid().toString());
+            statement.setString(3, player.getUuid().toString());
+
+            for (String role : player.getRoles()) {
+                statement.setString(2, role);
+                statement.setString(4, role);
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public boolean playerIsLinked(Player player) { //TODO maybe this can be using the discord api instead? (or a cache idk)
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()

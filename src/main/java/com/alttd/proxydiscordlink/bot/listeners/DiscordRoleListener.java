@@ -41,24 +41,26 @@ public class DiscordRoleListener extends ListenerAdapter {
         if (added_roles.isEmpty())
             return;
 
-        DiscordLinkPlayer player = DiscordLinkPlayer.getDiscordLinkPlayer(event.getUser().getIdLong());
+        DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(event.getUser().getIdLong());
 
-        if (player == null) {
+        if (discordLinkPlayer == null) {
             //TODO mayb ask the player to link to get their in game rank?
             return;
         }
 
-        player.updateMinecraft(added_roles, true);
+        discordLinkPlayer.updateMinecraft(added_roles, true);
         added_roles.forEach(discordRole -> {
             if (!discordRole.getAnnouncement().isEmpty()) {
                 Component component = miniMessage.parse(
                         discordRole.getAnnouncement(),
-                        Template.of("player", player.getUsername()));
+                        Template.of("player", discordLinkPlayer.getUsername()));
 
                 DiscordLink.getPlugin().getProxy().getAllPlayers()
                         .forEach(onlinePlayer -> onlinePlayer.sendMessage(component));
             }
         });
+
+        DiscordLink.getPlugin().getDatabase().syncRoles(discordLinkPlayer);
     }
 
     /**
@@ -70,10 +72,18 @@ public class DiscordRoleListener extends ListenerAdapter {
                 .filter(discordRole -> event.getRoles().stream()
                         .anyMatch(role -> role.getIdLong() == discordRole.getId()))
                 .collect(Collectors.toList());
+
         if (removed_roles.isEmpty())
             return;
 
-        DiscordLinkPlayer.getDiscordLinkPlayer(event.getUser().getIdLong())
-                .updateMinecraft(removed_roles, false);
+        DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(event.getUser().getIdLong());
+
+        if (discordLinkPlayer == null) {
+            //TODO mayb ask the player to link to get their in game rank?
+            return;
+        }
+
+        discordLinkPlayer.updateMinecraft(removed_roles, false);
+        DiscordLink.getPlugin().getDatabase().syncRoles(discordLinkPlayer);
     }
 }
