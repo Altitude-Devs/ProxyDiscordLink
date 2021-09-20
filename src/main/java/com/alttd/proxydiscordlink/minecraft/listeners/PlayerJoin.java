@@ -14,10 +14,13 @@ public class PlayerJoin {
         if (event.getPreviousServer().isPresent())
             return;
 
-        boolean sync = false;
-
-        String username = event.getPlayer().getUsername();
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(event.getPlayer().getUniqueId());
+
+        if (discordLinkPlayer == null)
+            return;
+
+        boolean sync = false;
+        String username = event.getPlayer().getUsername();
 
         if (!discordLinkPlayer.getUsername().equals(username)) { //Update username if needed
             discordLinkPlayer.setUsername(username);
