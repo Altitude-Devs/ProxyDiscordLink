@@ -6,7 +6,8 @@ import com.alttd.proxydiscordlink.util.Utilities;
 import com.alttd.shutdowninfo.events.WhitelistKickEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.proxy.Player;
-import net.kyori.adventure.text.minimessage.Template;
+
+import java.util.HashMap;
 
 public class WhitelistKick {
 
@@ -20,8 +21,9 @@ public class WhitelistKick {
         DiscordLink.getPlugin().getCache().removeCachedPlayer(player.getUniqueId());
         DiscordLink.getPlugin().getCache()
                 .cacheCode(player.getUniqueId(), authCode);
-
-        event.appendTemplate(Template.of("code", authCode));
+        HashMap<String, String> stringStringHashMap = new HashMap<>();
+        stringStringHashMap.put("code", authCode);
+        event.appendTemplate(stringStringHashMap);
         event.appendMessage("\n\n" + Config.WHITELIST_LINK_MESSAGE);
     }
 }

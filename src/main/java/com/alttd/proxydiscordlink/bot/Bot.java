@@ -99,11 +99,15 @@ public class Bot {
 
     public void addRole(long userId, long roleId, long guildId) {
         Guild guild = jda.getGuildById(guildId);
-        if (guild == null)
+        if (guild == null) {
+            ALogger.warn("Unable to find guild " + guildId);
             return;
+        }
         Role role = guild.getRoleById(roleId);
-        if (role == null)
+        if (role == null) {
+            ALogger.warn("Unable to find role " + roleId);
             return;
+        }
         Member member = guild.getMemberById(userId);
         if (member == null) {
             guild.retrieveMemberById(userId).queue(m -> addRole(guild, m, role));
@@ -113,16 +117,24 @@ public class Bot {
     }
 
     private void addRole(Guild guild, Member member, Role role) {
+        if (member == null) {
+            ALogger.warn("Unable to find member when adding role");
+            return;
+        }
         guild.addRoleToMember(member, role).queue();
     }
 
     public void removeRole(long userId, long roleId, long guildId) {
         Guild guild = jda.getGuildById(guildId);
-        if (guild == null)
+        if (guild == null) {
+            ALogger.warn("Unable to find guild " + guildId);
             return;
+        }
         Role role = guild.getRoleById(roleId);
-        if (role == null)
+        if (role == null) {
+            ALogger.warn("Unable to find role " + roleId);
             return;
+        }
         Member member = guild.getMemberById(userId);
         if (member == null) {
             guild.retrieveMemberById(userId).queue(m -> removeRole(guild, m, role));
@@ -132,6 +144,10 @@ public class Bot {
     }
 
     private void removeRole(Guild guild, Member member, Role role) {
+        if (member == null) {
+            ALogger.warn("Unable to find member when removing role");
+            return;
+        }
         guild.removeRoleFromMember(member, role).queue();
     }
 

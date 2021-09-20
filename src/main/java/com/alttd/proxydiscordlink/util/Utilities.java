@@ -103,16 +103,18 @@ public class Utilities {
 
     public static List<DiscordRole> getDiscordRolesForUser(UUID uuid, Member member) {
         User user = Utilities.getLuckPerms().getUserManager().getUser(uuid);
+        List<InheritanceNode> groups;
+        List<Role> roles = member.getRoles();
+
         if (user == null) {
             ALogger.error("Got null user from LuckPerms when processing " + uuid + " during linking.");
-            return null;
+            groups = new ArrayList<>();
+        } else {
+            groups = user.getNodes().stream()
+                    .filter(node -> node instanceof InheritanceNode)
+                    .map(node -> (InheritanceNode) node)
+                    .collect(Collectors.toList());
         }
-
-        List<InheritanceNode> groups = user.getNodes().stream()
-                .filter(node -> node instanceof InheritanceNode)
-                .map(node -> (InheritanceNode) node)
-                .collect(Collectors.toList());
-        List<Role> roles = member.getRoles();
 
         return DiscordRole.getDiscordRoles().stream()
                 .filter(discordRole -> {
@@ -127,22 +129,5 @@ public class Utilities {
                     return false;
                 })
                 .collect(Collectors.toList());
-    }
-
-    public static List<DiscordRole> getMinecraftRolesForUser(UUID uuid) {
-        User user = getLuckPerms().getUserManager().getUser(uuid);
-        List<DiscordRole> roles = new ArrayList<>();
-        if (user == null)
-            return roles;
-
-        user.getNodes().stream()
-                .filter(node -> node instanceof InheritanceNode)
-                .map(node -> ((InheritanceNode) node).getGroupName())
-                .collect(Collectors.toList())
-                .forEach(lpName -> DiscordRole.getDiscordRoles().stream()
-                        .filter(discordRole -> discordRole.getLuckpermsName().equals(lpName))
-                        .findFirst()
-                        .ifPresent(roles::add));
-        return roles;
     }
 }

@@ -28,7 +28,7 @@ public class DiscordMessageListener extends ListenerAdapter {
         if (event.isWebhookMessage()) {
             return;
         }
-        if (event.getMessage().getChannel().getIdLong() == BotConfig.LINK_CHANNEL) {
+        if (event.getMessage().getChannel().getIdLong() == BotConfig.COMMAND_CHANNEL) {
             String content = event.getMessage().getContentRaw();
             if (content.startsWith(BotConfig.prefixMap.get(event.getGuild().getIdLong())) && content.length() > 1) {
                 String[] split = content.split(" ");
