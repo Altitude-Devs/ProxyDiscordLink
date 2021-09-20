@@ -219,7 +219,7 @@ public class BotConfig {
                     "update-to-discord: true\n\t\t" +
                     "announcement: <player> got example rank!");
         node.getChildrenMap().forEach((key, value) -> {
-            String internalName = value.getString();
+            String internalName = key.toString();
             long id = value.getNode("role-id").getLong(-1);
             String luckpermsName = value.getNode("luckperms-name").getString("example");
             String display_name = value.getNode("display-name").getString("Example");
