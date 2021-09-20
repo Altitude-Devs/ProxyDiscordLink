@@ -20,7 +20,7 @@ public class DiscordLinkPlayer {
     private boolean nick;
     private final List<String> roleNames;
 
-    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, List<String> roleNames) {//TODO what is nick used for? and where is it stored
+    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, List<String> roleNames) {
         this.userId = userId;
         this.uuid = uuid;
         this.username = username;
