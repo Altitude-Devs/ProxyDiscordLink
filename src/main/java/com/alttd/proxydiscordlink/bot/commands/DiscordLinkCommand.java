@@ -93,6 +93,7 @@ public class DiscordLinkCommand extends DiscordCommand {
                 .queue(message1 -> message1.delete().queueAfter(5, TimeUnit.SECONDS));
 
         DiscordLinkPlayer.addDiscordLinkPlayer(discordLinkPlayer);
+        DiscordLink.getPlugin().getDatabase().syncPlayer(discordLinkPlayer);
         DiscordLink.getPlugin().getCache().removeCachedPlayer(discordLinkPlayer.getUuid());
     }
 

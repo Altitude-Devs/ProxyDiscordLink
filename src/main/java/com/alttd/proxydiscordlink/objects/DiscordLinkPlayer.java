@@ -69,8 +69,6 @@ public class DiscordLinkPlayer {
             roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
         else
             roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().removeRole(userId, role.getId(), BotConfig.GUILD_ID)); //TODO test
-
-        DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement
         //TODO SYNC ROLES TO DATABASE
     }
@@ -88,7 +86,6 @@ public class DiscordLinkPlayer {
                     user.data().remove(group);
             });
         });
-        DiscordLink.getPlugin().getDatabase().syncPlayer(this);
         //TODO implement
         //TODO SYNC ROLES TO DATABASE
     }

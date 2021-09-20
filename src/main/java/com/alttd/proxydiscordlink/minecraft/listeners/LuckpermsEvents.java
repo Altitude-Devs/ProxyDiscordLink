@@ -41,7 +41,7 @@ public class LuckpermsEvents {
         if (discordLinkPlayer == null)
             return;
 
-        discordLinkPlayer.updateMinecraft(List.of(optional.get()), added);
+        discordLinkPlayer.updateDiscord(List.of(optional.get()), added);
     }
 
 }

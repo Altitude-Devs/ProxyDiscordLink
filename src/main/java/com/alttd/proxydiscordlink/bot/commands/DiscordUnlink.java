@@ -42,7 +42,7 @@ public class DiscordUnlink extends DiscordCommand {
             message.getChannel().sendMessage("Your accounts aren't linked.").queue();
             return;
         }
-        database.removeLinkedAccount(discordLinkPlayer.getUuid());
+        database.removeLinkedAccount(discordLinkPlayer);
 
         discordLinkPlayer.updateDiscord(
                 DiscordRole.getDiscordRoles().stream()
