@@ -55,7 +55,7 @@ public class DiscordNick extends DiscordCommand {
             }
             case "nickname" -> {
                 String nick = DiscordLink.getPlugin().getDatabase().getNick(discordLinkPlayer.getUuid());
-                if (nick.isBlank())
+                if (nick == null || nick.isBlank())
                     nick = discordLinkPlayer.getUsername();
                 member.modifyNickname(nick).queue();
                 channel.sendMessage("Your nickname has been set to `" + nick + "`.").queue();
