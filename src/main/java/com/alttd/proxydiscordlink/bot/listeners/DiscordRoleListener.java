@@ -50,6 +50,7 @@ public class DiscordRoleListener extends ListenerAdapter {
 
         discordLinkPlayer.updateMinecraft(added_roles, true);
         added_roles.forEach(discordRole -> {
+            discordLinkPlayer.addRole(discordRole.getInternalName());
             if (!discordRole.getAnnouncement().isEmpty()) {
                 Component component = miniMessage.parse(
                         discordRole.getAnnouncement(),
@@ -83,6 +84,7 @@ public class DiscordRoleListener extends ListenerAdapter {
             return;
         }
 
+        removed_roles.forEach(role -> discordLinkPlayer.removeRole(role.getInternalName()));
         discordLinkPlayer.updateMinecraft(removed_roles, false);
         DiscordLink.getPlugin().getDatabase().syncRoles(discordLinkPlayer);
     }

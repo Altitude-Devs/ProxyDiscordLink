@@ -41,7 +41,13 @@ public class LuckpermsEvents {
         if (discordLinkPlayer == null)
             return;
 
-        discordLinkPlayer.updateDiscord(List.of(optional.get()), added);
+        DiscordRole discordRole = optional.get();
+
+        if (added)
+            discordLinkPlayer.addRole(discordRole.getInternalName());
+        else
+            discordLinkPlayer.removeRole(discordRole.getInternalName());
+        discordLinkPlayer.updateDiscord(List.of(discordRole), added);
         DiscordLink.getPlugin().getDatabase().syncRoles(discordLinkPlayer);
     }
 

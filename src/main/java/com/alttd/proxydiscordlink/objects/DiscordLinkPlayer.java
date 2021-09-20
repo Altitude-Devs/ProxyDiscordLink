@@ -20,12 +20,13 @@ public class DiscordLinkPlayer {
     private boolean nick;
     private final List<String> roleNames;
 
-    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, List<String> roleNames) {
+    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, List<String> roleNames) {//TODO what is nick used for? and where is it stored
         this.userId = userId;
         this.uuid = uuid;
         this.username = username;
         this.roleNames = roleNames;
         this.discordUsername = discordUsername;
+        this.nick = nick;
     }
 
     public long getUserId() {
@@ -46,6 +47,15 @@ public class DiscordLinkPlayer {
 
     public List<String> getRoles() {
         return roleNames;
+    }
+
+    public void addRole(String role) {
+        if (!roleNames.contains(role))
+            roleNames.add(role);
+    }
+
+    public void removeRole(String role) {
+        roleNames.remove(role);
     }
 
     public String getDiscordUsername() {
@@ -106,21 +116,25 @@ public class DiscordLinkPlayer {
             discordLinkPlayers.add(discordLinkPlayer);
     }
 
-    public static void removeDiscordLinkPlayer(DiscordLinkPlayer discordLinkPlayer) {
-        discordLinkPlayers.remove(discordLinkPlayer);
-    }
-
     public static DiscordLinkPlayer getDiscordLinkPlayer(long userId) {
         return discordLinkPlayers.stream()
                 .filter(discordLinkPlayer -> discordLinkPlayer.getUserId() == userId)
                 .findFirst()
-                .orElseGet(() -> DiscordLink.getPlugin().getDatabase().getPlayer(userId));
+                .orElseGet(() -> {
+                    DiscordLinkPlayer player = DiscordLink.getPlugin().getDatabase().getPlayer(userId);
+                    DiscordLinkPlayer.addDiscordLinkPlayer(player);
+                    return player;
+                });
     }
 
     public static DiscordLinkPlayer getDiscordLinkPlayer(UUID uuid) {
         return discordLinkPlayers.stream()
                 .filter(o1 -> o1.getUuid().equals(uuid))
                 .findFirst()
-                .orElseGet(() -> DiscordLink.getPlugin().getDatabase().getPlayer(uuid));
+                .orElseGet(() -> {
+                    DiscordLinkPlayer player = DiscordLink.getPlugin().getDatabase().getPlayer(uuid);
+                    DiscordLinkPlayer.addDiscordLinkPlayer(player);
+                    return player;
+                });
     }
 }
