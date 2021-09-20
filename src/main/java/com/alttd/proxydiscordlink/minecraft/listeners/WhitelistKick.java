@@ -21,7 +21,7 @@ public class WhitelistKick {
         DiscordLink.getPlugin().getCache()
                 .cacheCode(player.getUniqueId(), authCode);
 
-        event.appendTemplates(Template.of("code", authCode));
+        event.appendTemplate(Template.of("code", authCode));
         event.appendMessage("\n\n" + Config.WHITELIST_LINK_MESSAGE);
     }
 }

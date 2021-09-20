@@ -45,7 +45,7 @@ dependencies {
     // MySQL
     runtimeOnly("mysql:mysql-connector-java:8.0.23")
     // ShutdownInfo
-    compileOnly("org.example:ShutdownInfo:1.0-SNAPSHOT")
+    compileOnly("com.alttd:ShutdownInfo:1.0")
 }
 
 tasks {
