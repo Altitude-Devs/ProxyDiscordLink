@@ -1,5 +1,6 @@
 plugins {
     java
+    `maven-publish`
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -49,6 +50,23 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java:8.0.23")
     // ShutdownInfo
     compileOnly("com.alttd:ShutdownInfo:1.0")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+
+    repositories{
+        maven {
+            name = "maven"
+            url = uri("http://leo:8081/")
+            isAllowInsecureProtocol = true
+            credentials(PasswordCredentials::class)
+        }
+    }
 }
 
 tasks {
