@@ -1,5 +1,5 @@
 plugins {
-    `java`
+    java
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -32,7 +32,10 @@ allprojects {
 
 dependencies {
     // Minimessage
-    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
+    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT") {
+        exclude("net.kyori")
+        exclude("net.kyori.examination")
+    }
     // Velocity
     compileOnly("com.velocitypowered:velocity-api:1.1.5")
     annotationProcessor("com.velocitypowered:velocity-api:1.1.5")
@@ -52,14 +55,12 @@ tasks {
 
     shadowJar {
         archiveFileName.set("${project.name}-${project.version}.jar")
-        exclude("net.kyori.adventure")
-        exclude("net.kyori.examination")
-        minimize {
-            //exclude(dependency("net.kyori:.*:.*"))
-        }
+//        exclude("net.kyori")
+//        exclude("net.kyori.examination")
         listOf(
 //            "net.kyori",
-            "net.dv8tion.jda"
+            "net.dv8tion.jda",
+            "net.kyori.adventure.text.minimessage"
         ).forEach { relocate(it, "${rootProject.group}.lib.$it") }
     }
 
