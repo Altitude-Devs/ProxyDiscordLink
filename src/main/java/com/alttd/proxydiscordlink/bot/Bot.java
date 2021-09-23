@@ -3,7 +3,6 @@ package com.alttd.proxydiscordlink.bot;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
-import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -20,7 +19,7 @@ import javax.security.auth.login.LoginException;
 import java.util.concurrent.TimeUnit;
 
 public class Bot {
-    private JDA jda = null;
+    public JDA jda = null;
 
     public void connect() {
         disconnect();
