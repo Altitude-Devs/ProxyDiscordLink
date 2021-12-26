@@ -1,53 +1,66 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-allprojects {
-    val build = System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"
-    group = "com.alttd.proxydiscordlink"
-    version = "1.0.0-BETA-$build"
-    description = "A velocity plugin to link Discord and Minecraft accounts."
+group = "com.alttd.proxydiscordlink"
+version = "1.0.0-BETA-SNAPSHOT"
+description = "A velocity plugin to link Discord and Minecraft accounts."
 
-    apply(plugin = "java")
-    apply(plugin = "maven-publish")
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(16))
-        }
-    }
-
-    tasks {
-        withType<JavaCompile> {
-            options.encoding = Charsets.UTF_8.name()
-            options.release.set(16)
-        }
-
-        withType<Javadoc> {
-            options.encoding = Charsets.UTF_8.name()
-        }
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+
+tasks {
+    withType<JavaCompile> {
+        options.encoding = Charsets.UTF_8.name()
+        options.release.set(17)
+    }
+
+    withType<Javadoc> {
+        options.encoding = Charsets.UTF_8.name()
+    }
+
+    shadowJar {
+        dependsOn(getByName("relocateJars") as ConfigureShadowRelocation)
+        archiveFileName.set("${project.name}-${project.version}.jar")
+        minimize()
+        configurations = listOf(project.configurations.shadow.get())
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
+
+    create<ConfigureShadowRelocation>("relocateJars") {
+        target = shadowJar.get()
+        prefix = "${project.name}.lib"
+    }
+}
+
 
 dependencies {
-    // Minimessage
-    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT") {
-        exclude("net.kyori")
-        exclude("net.kyori.examination")
+    // Minimessage // TODO : update all usages to 4.2
+    shadow("net.kyori:adventure-text-minimessage:4.2.0-SNAPSHOT") {
+        exclude("net.kyori", "adventure-api")
     }
     // Velocity
-    compileOnly("com.velocitypowered:velocity-api:1.1.5")
-    annotationProcessor("com.velocitypowered:velocity-api:1.1.5")
+    compileOnly("com.velocitypowered:velocity-api:3.0.1")
+    annotationProcessor("com.velocitypowered:velocity-api:3.0.1")
     // JDA
-    implementation("net.dv8tion:JDA:4.3.0_283") {
+    shadow("net.dv8tion:JDA:5.0.0-alpha.3") {
         exclude("opus-java") // exclude audio
     }
     // LuckPerms
     compileOnly("net.luckperms:api:5.3")
     // MySQL
-    runtimeOnly("mysql:mysql-connector-java:8.0.23")
+    shadow("mysql:mysql-connector-java:8.0.25")
     // ShutdownInfo
     compileOnly("com.alttd:ShutdownInfo:1.0")
 }
@@ -62,28 +75,8 @@ publishing {
     repositories{
         maven {
             name = "maven"
-            url = uri("http://leo:8081/")
-            isAllowInsecureProtocol = true
+            url = uri("https://repo.destro.xyz/snapshots")
             credentials(PasswordCredentials::class)
         }
     }
-}
-
-tasks {
-
-    shadowJar {
-        archiveFileName.set("${project.name}-${project.version}.jar")
-//        exclude("net.kyori")
-//        exclude("net.kyori.examination")
-        listOf(
-//            "net.kyori",
-            "net.dv8tion.jda",
-            "net.kyori.adventure.text.minimessage"
-        ).forEach { relocate(it, "${rootProject.group}.lib.$it") }
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
-
 }

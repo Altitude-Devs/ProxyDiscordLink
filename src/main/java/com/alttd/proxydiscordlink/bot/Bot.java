@@ -87,9 +87,9 @@ public class Bot {
         if (embedBuilder.isEmpty()) return;
         try {
             if (secondsTillDelete < 0) {
-                channel.sendMessage(embedBuilder.build()).queue();
+                channel.sendMessageEmbeds(embedBuilder.build()).queue();
             } else {
-                channel.sendMessage(embedBuilder.build()).queue(message -> message.delete().queueAfter(secondsTillDelete, TimeUnit.SECONDS));
+                channel.sendMessageEmbeds(embedBuilder.build()).queue(message -> message.delete().queueAfter(secondsTillDelete, TimeUnit.SECONDS));
             }
         } catch (Exception e) {
             ALogger.error("caught some exception, " + e);

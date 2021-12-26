@@ -4,7 +4,7 @@ import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.Bot;
 import com.alttd.proxydiscordlink.bot.DiscordCommand;
 import com.alttd.proxydiscordlink.config.BotConfig;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class DiscordMessageListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+    public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor() == event.getJDA().getSelfUser()) {
             return;
         }
