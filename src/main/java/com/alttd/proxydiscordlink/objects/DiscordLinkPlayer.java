@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class DiscordLinkPlayer {
     private final long userId;
@@ -18,15 +19,17 @@ public class DiscordLinkPlayer {
     private String username;
     private String discordUsername;
     private boolean nick;
+    private boolean active;
     private final List<String> roleNames;
 
-    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, List<String> roleNames) {
+    public DiscordLinkPlayer(long userId, UUID uuid, String username, String discordUsername, boolean nick, boolean active, List<String> roleNames) {
         this.userId = userId;
         this.uuid = uuid;
         this.username = username;
         this.roleNames = roleNames;
         this.discordUsername = discordUsername;
         this.nick = nick;
+        this.active = active;
     }
 
     public long getUserId() {
@@ -74,6 +77,16 @@ public class DiscordLinkPlayer {
         this.nick = nick;
     }
 
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        DiscordLink.getPlugin().getDatabase().setActive(getUuid(), active);
+        this.active = active;
+    }
+
     public void updateDiscord(List<DiscordRole> roles, boolean added) {
         if (added)
             roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID));
@@ -103,6 +116,22 @@ public class DiscordLinkPlayer {
             DiscordLink.getPlugin().getBot().removeRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID);
     }
 
+    public void unlinkDiscordLinkPlayer() {
+        setActive(false);
+
+        updateDiscord(
+                DiscordRole.getDiscordRoles().stream()
+                        .filter(role -> getRoles().contains(role.getInternalName()))
+                        .collect(Collectors.toList()),
+                false);
+        updateMinecraft(
+                DiscordRole.getDiscordRoles().stream()
+                        .filter(role -> getRoles().contains(role.getInternalName()))
+                        .collect(Collectors.toList()),
+                false);
+        linkedRole(false);
+    }
+
     //Static stuff
 
     private static final List<DiscordLinkPlayer> discordLinkPlayers = new ArrayList<>();
@@ -122,7 +151,8 @@ public class DiscordLinkPlayer {
                 .findFirst()
                 .orElseGet(() -> {
                     DiscordLinkPlayer player = DiscordLink.getPlugin().getDatabase().getPlayer(userId);
-                    DiscordLinkPlayer.addDiscordLinkPlayer(player);
+                    if (player != null)
+                        DiscordLinkPlayer.addDiscordLinkPlayer(player);
                     return player;
                 });
     }
@@ -133,7 +163,8 @@ public class DiscordLinkPlayer {
                 .findFirst()
                 .orElseGet(() -> {
                     DiscordLinkPlayer player = DiscordLink.getPlugin().getDatabase().getPlayer(uuid);
-                    DiscordLinkPlayer.addDiscordLinkPlayer(player);
+                    if (player != null)
+                        DiscordLinkPlayer.addDiscordLinkPlayer(player);
                     return player;
                 });
     }

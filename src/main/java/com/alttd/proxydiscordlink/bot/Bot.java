@@ -3,18 +3,20 @@ package com.alttd.proxydiscordlink.bot;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
-import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.jetbrains.annotations.Nullable;
 
 import javax.security.auth.login.LoginException;
 import java.util.concurrent.TimeUnit;
@@ -77,20 +79,36 @@ public class Bot {
     public void sendEmbedToDiscord(long channelid, EmbedBuilder embedBuilder, long secondsTillDelete) {
         //sendMessageToDiscord(client.getTextChannelById(channel), message, blocking);
         TextChannel channel = jda.getTextChannelById(channelid);
-        if (jda == null) return;
+        if (jda == null) {
+            ALogger.warn("JDA is NULL");
+            return;
+        }
 
-        if (channel == null) return;
+        if (channel == null) {
+            ALogger.warn("Can't send message to NULL channel (" + channelid + ")");
+            return;
+        }
 
-        if (embedBuilder == null) return;
+        if (embedBuilder == null) {
+            ALogger.warn("Tried to send a NULL embed");
+            return;
+        }
 
-        if (!embedBuilder.isValidLength()) return;
+        if (!embedBuilder.isValidLength()) {
+            ALogger.warn("Tried to send an invalid embed");
+            return;
+        }
 
-        if (embedBuilder.isEmpty()) return;
+        if (embedBuilder.isEmpty()) {
+            ALogger.warn("Tried to send an empty embed");
+            return;
+        }
+
         try {
             if (secondsTillDelete < 0) {
-                channel.sendMessage(embedBuilder.build()).queue();
+                channel.sendMessageEmbeds(embedBuilder.build()).queue();
             } else {
-                channel.sendMessage(embedBuilder.build()).queue(message -> message.delete().queueAfter(secondsTillDelete, TimeUnit.SECONDS));
+                channel.sendMessageEmbeds(embedBuilder.build()).queue(message -> message.delete().queueAfter(secondsTillDelete, TimeUnit.SECONDS));
             }
         } catch (Exception e) {
             ALogger.error("caught some exception, " + e);
@@ -165,5 +183,41 @@ public class Bot {
             return false;
         }
         return true;
+    }
+
+    public void discordUnban(long guildId, long userId) {
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null)
+            return;
+        if (!guild.getSelfMember().getPermissions().contains(Permission.BAN_MEMBERS)) {
+            ALogger.warn("I can't unban members in " + guild.getName() + ".");
+            return;
+        }
+        guild.retrieveBanList().queue(bans -> bans.stream()
+                .filter(ban -> ban.getUser().getIdLong() == userId)
+                .findFirst()
+                .ifPresent(bans::remove));
+    }
+
+    public void discordBan(long guildId, long userId, @Nullable String optionalReason) {
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null)
+            return;
+        if (!guild.getSelfMember().getPermissions().contains(Permission.BAN_MEMBERS)) {
+            ALogger.warn("I can't ban members in " + guild.getName() + ".");
+            return;
+        }
+        Member member = guild.getMemberById(userId);
+        if (member == null)
+            return;
+        try {
+            if (optionalReason == null)
+                member.ban(0).queue();
+            else
+                member.ban(0, optionalReason).queue();
+        } catch (InsufficientPermissionException exception) {
+            ALogger.warn("Unable to ban " + userId + " from Discord they might be above me.");
+        }
+
     }
 }

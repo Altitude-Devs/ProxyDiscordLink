@@ -59,8 +59,8 @@ public class Unlink implements SubCommand {
         }
 
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(player.getUniqueId());
-        database.removeLinkedAccount(discordLinkPlayer);
 
+        discordLinkPlayer.setActive(false);
         discordLinkPlayer.updateDiscord(
                 DiscordRole.getDiscordRoles().stream()
                         .filter(role -> discordLinkPlayer.getRoles().contains(role.getInternalName()))

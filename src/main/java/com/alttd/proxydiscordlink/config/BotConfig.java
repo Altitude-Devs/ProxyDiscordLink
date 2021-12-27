@@ -170,6 +170,7 @@ public class BotConfig {
     public static long COMMAND_CHANNEL = -1;
     public static long LINK_CHANNEL = -1;
     public static long GUILD_ID = -1;
+    public static long EVIDENCE_CHANNEL_ID = -1;
     public static long LINKED_ROLE_ID = -1;
 
     private static void settings() {
@@ -177,6 +178,7 @@ public class BotConfig {
         COMMAND_CHANNEL = getLong("settings.command-channel", COMMAND_CHANNEL);
         LINK_CHANNEL = getLong("settings.link-channel", LINK_CHANNEL);
         GUILD_ID = getLong("settings.guild-id", GUILD_ID);
+        EVIDENCE_CHANNEL_ID = getLong("settings.evidence-channel-id", EVIDENCE_CHANNEL_ID);
         LINKED_ROLE_ID = getLong("settings.linked-role-id", LINKED_ROLE_ID);
     }
 

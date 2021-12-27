@@ -4,15 +4,14 @@ import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.Bot;
 import com.alttd.proxydiscordlink.bot.DiscordCommand;
 import com.alttd.proxydiscordlink.config.BotConfig;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class DiscordMessageListener extends ListenerAdapter {
 
-    private DiscordLink plugin;
+    private final DiscordLink plugin;
     private final Bot bot;
 
     public DiscordMessageListener() {
@@ -21,13 +20,13 @@ public class DiscordMessageListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getAuthor() == event.getJDA().getSelfUser()) {
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (!event.isFromGuild())
             return;
-        }
-        if (event.isWebhookMessage()) {
+        if (event.getAuthor() == event.getJDA().getSelfUser())
             return;
-        }
+        if (event.isWebhookMessage())
+            return;
         if (event.getMessage().getChannel().getIdLong() == BotConfig.COMMAND_CHANNEL) {
             String content = event.getMessage().getContentRaw();
             if (content.startsWith(BotConfig.prefixMap.get(event.getGuild().getIdLong())) && content.length() > 1) {
@@ -35,9 +34,8 @@ public class DiscordMessageListener extends ListenerAdapter {
                 String cmd = split[0].substring(1).toLowerCase();
                 String[] args = Arrays.copyOfRange(split, 1, split.length);
                 for(DiscordCommand command : DiscordCommand.getCommands()) {
-                    if(!command.getCommand().equalsIgnoreCase(cmd)) {
+                    if(!command.getCommand().equalsIgnoreCase(cmd))
                         continue;
-                    }
                     if(command.getPermission() != null) {
                         // TODO permission check? do we need this?
                     }
@@ -49,12 +47,11 @@ public class DiscordMessageListener extends ListenerAdapter {
             String[] split = content.split(" ");
             String cmd = split[0].substring(1).toLowerCase();
             String[] args = Arrays.copyOfRange(split, 1, split.length);
-            if (cmd.equalsIgnoreCase("link")) {
-                Optional<DiscordCommand> link = DiscordCommand.getCommands().stream().filter(discordCommand -> discordCommand.getCommand().equals("link")).findFirst();
-                if (!link.isEmpty()) {
-                    link.get().handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args);
-                }
-            }
+            if (cmd.equalsIgnoreCase("link"))
+                DiscordCommand.getCommands().stream()
+                        .filter(discordCommand -> discordCommand.getCommand().equals("link"))
+                        .findFirst()
+                        .ifPresent(discordCommand -> discordCommand.handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args));
         }
     }
 

@@ -6,6 +6,7 @@ import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.database.DatabaseConnection;
+import com.alttd.proxydiscordlink.minecraft.listeners.LiteBansBanListener;
 import com.alttd.proxydiscordlink.minecraft.listeners.LuckpermsEvents;
 import com.alttd.proxydiscordlink.minecraft.listeners.PlayerLeave;
 import com.alttd.proxydiscordlink.minecraft.listeners.WhitelistKick;
@@ -65,6 +66,7 @@ public class DiscordLink {
         loadCommands();
         loadEvents();
         loadBot();
+        new LiteBansBanListener().registerEvents();
     }
 
     public void reloadConfig() {

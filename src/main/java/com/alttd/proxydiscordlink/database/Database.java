@@ -19,6 +19,7 @@ public class Database {
                 "`discord_username` VARCHAR(256) NOT NULL, " +
                 "`discord_id` BIGINT NOT NULL, " +
                 "`nickname` BIT DEFAULT b'0', " +
+                "`active` BIT DEFAULT b'1', " +
                 "UNIQUE(discord_id), " +
                 "PRIMARY KEY(player_uuid)" +
                 ");";
@@ -37,15 +38,14 @@ public class Database {
     }
 
     public void syncPlayer(DiscordLinkPlayer player) {
+        //Remove any accounts with the players uuid/id
+        removeLinkedAccount(player);
         try {
             String sql = "INSERT INTO linked_accounts " +
-                    "VALUES (?, ?, ?, ?, ?) " +
+                    "VALUES (?, ?, ?, ?, ?, ?) " +
                     "ON DUPLICATE KEY UPDATE " +
                     "player_uuid = ?, " +
-                    "player_name = ?, " +
-                    "discord_username = ?, " +
-                    "discord_id = ?, " +
-                    "nickname = ? ";
+                    "discord_id = ?";
 
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
 
@@ -55,12 +55,10 @@ public class Database {
             statement.setString(3, player.getDiscordUsername());
             statement.setLong(4, player.getUserId());
             statement.setInt(5, player.hasNick() ? 1 : 0);
+            statement.setInt(6, player.isActive() ? 1 : 0);
             //Update
-            statement.setString(6, player.getUuid().toString());
-            statement.setString(7, player.getUsername());
-            statement.setString(8, player.getDiscordUsername());
-            statement.setLong(9, player.getUserId());
-            statement.setInt(10, player.hasNick() ? 1 : 0);
+            statement.setString(7, player.getUuid().toString());
+            statement.setLong(8, player.getUserId());
 
             statement.execute();
         } catch (SQLException exception) {
@@ -108,7 +106,26 @@ public class Database {
     public boolean playerIsLinked(Player player) { //TODO maybe this can be using the discord api instead? (or a cache idk)
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("SELECT * FROM linked_accounts WHERE player_uuid = '" + player.getUniqueId().toString() + "'");
+                    .prepareStatement("SELECT * FROM linked_accounts WHERE player_uuid = ?");
+            statement.setString(1, player.getUniqueId().toString());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return true;
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean playerIsLinked(long id) { //TODO maybe this can be using the discord api instead? (or a cache idk)
+        try {
+            PreparedStatement statement = DatabaseConnection.getConnection()
+                    .prepareStatement("SELECT * FROM linked_accounts WHERE discord_id = ?");
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
@@ -125,14 +142,10 @@ public class Database {
     public void removeLinkedAccount(DiscordLinkPlayer player) {
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("DELETE FROM linked_accounts WHERE discord_id = ?");
+                    .prepareStatement("DELETE FROM linked_accounts WHERE discord_id = ? OR uuid = ?");
             statement.setLong(1, player.getUserId());
+            statement.setString(2, player.getUuid().toString());
             statement.executeUpdate();
-
-            PreparedStatement statement2 = DatabaseConnection.getConnection()
-                    .prepareStatement("DELETE FROM account_roles WHERE uuid = ?");
-            statement2.setString(1, player.getUuid().toString());
-            statement2.executeUpdate();
         } catch (SQLException var2) {
             var2.printStackTrace();
         }
@@ -218,6 +231,7 @@ public class Database {
                     resultSet.getString("player_name"),
                     resultSet.getString("discord_username"),
                     resultSet.getInt("nickname") == 1,
+                    resultSet.getInt("active") == 1,
                     new ArrayList<>()
             );
             addRoles(discordLinkPlayer);
@@ -238,6 +252,16 @@ public class Database {
             {
                 discordLinkPlayer.getRoles().add(resultSet.getString("role_name"));
             }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void setActive(UUID uuid, boolean active) {
+        String sql = "UPDATE linked_accounts SET active = ? WHERE player_uuid = ?";
+        try {
+            PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+            statement.setInt(1, active ? 1 : 0);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

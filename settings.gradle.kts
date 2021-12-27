@@ -4,12 +4,13 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         // Altitude
-        maven {
-            name = "maven"
-            url = uri("http://leo:8081/")
-            isAllowInsecureProtocol = true
-            //credentials(PasswordCredentials::class)
-        }
+//        maven {
+//            name = "maven"
+//            url = uri("http://leo:8081/")
+//            isAllowInsecureProtocol = true
+//            //credentials(PasswordCredentials::class)
+//        }
+        maven("https://jitpack.io")
         // Velocity
         maven("https://nexus.velocitypowered.com/repository/maven-public/")
         // JDA
