@@ -142,7 +142,7 @@ public class Database {
     public void removeLinkedAccount(DiscordLinkPlayer player) {
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
-                    .prepareStatement("DELETE FROM linked_accounts WHERE discord_id = ? OR uuid = ?");
+                    .prepareStatement("DELETE FROM linked_accounts WHERE discord_id = ? OR player_uuid = ?");
             statement.setLong(1, player.getUserId());
             statement.setString(2, player.getUuid().toString());
             statement.executeUpdate();
