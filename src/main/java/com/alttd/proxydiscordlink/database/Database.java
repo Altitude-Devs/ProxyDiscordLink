@@ -111,7 +111,7 @@ public class Database {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return true;
+                return resultSet.getInt("active") == 1;
             }
 
         } catch (SQLException exception) {
