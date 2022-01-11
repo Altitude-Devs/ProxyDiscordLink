@@ -79,12 +79,19 @@ public class DiscordLinkCommand extends DiscordCommand {
 
         discordLinkPlayer.linkedRole(true);
         Player player = DiscordLink.getPlugin().getProxy().getPlayer(discordLinkPlayer.getUuid()).orElse(null);
-        DiscordLink.getPlugin().getBot().changeNick(
-                message.getGuild().getIdLong(),
-                message.getMember().getIdLong(),
-                player == null ?
-                        Utilities.getLuckPerms().getUserManager().getUser(discordLinkPlayer.getUuid()).getUsername() :
-                        player.getUsername());
+        User user = Utilities.getLuckPerms().getUserManager().getUser(discordLinkPlayer.getUuid());
+        if (player != null || user != null)
+            DiscordLink.getPlugin().getBot().changeNick(
+                    message.getGuild().getIdLong(),
+                    message.getMember().getIdLong(),
+                    player == null ?
+                            user.getUsername() :
+                            player.getUsername());
+        else
+            DiscordLink.getPlugin().getBot().changeNick(
+                    message.getGuild().getIdLong(),
+                    message.getMember().getIdLong(),
+                    discordLinkPlayer.getUsername());
 
         message.getChannel().sendMessage("You have successfully linked " +
                 discordLinkPlayer.getUsername() + " with " +
