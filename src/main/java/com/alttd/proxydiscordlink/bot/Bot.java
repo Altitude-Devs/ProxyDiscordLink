@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jetbrains.annotations.Nullable;
 
 import javax.security.auth.login.LoginException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class Bot {
@@ -193,10 +194,16 @@ public class Bot {
             ALogger.warn("I can't unban members in " + guild.getName() + ".");
             return;
         }
-        guild.retrieveBanList().queue(bans -> bans.stream()
-                .filter(ban -> ban.getUser().getIdLong() == userId)
-                .findFirst()
-                .ifPresent(bans::remove));
+        guild.retrieveBanList().queue(bans -> {
+            Optional<Guild.Ban> first = bans.stream()
+                    .filter(ban -> ban.getUser().getIdLong() == userId)
+                    .findFirst();
+            if (first.isEmpty())
+                return;
+            Guild.Ban ban = first.get();
+            if (ban.getReason() != null && ban.getReason().equals("Auto ban due to Minecraft ban"))
+                bans.remove(ban);
+        });
     }
 
     public void discordBan(long guildId, long userId, @Nullable String optionalReason) {

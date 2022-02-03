@@ -38,34 +38,36 @@ dependencies {
     annotationProcessor("com.velocitypowered:velocity-api:1.1.5")
     // JDA
     implementation("net.dv8tion:JDA:5.0.0-alpha.3") {
-        exclude("opus-java") // exclude audio
-    }
-    compileOnly("com.gitlab.ruany:LitebansAPI:0.3.5")
-    // LuckPerms
-    compileOnly("net.luckperms:api:5.3")
-    // MySQL
-    runtimeOnly("mysql:mysql-connector-java:8.0.23")
-    // ShutdownInfo
-    compileOnly("com.alttd:ShutdownInfo:1.0")
-}
-
-tasks {
-
-    shadowJar {
-        archiveFileName.set("${project.name}-${project.version}.jar")
-        exclude("net.kyori.adventure")
-        exclude("net.kyori.examination")
-        minimize {
-            //exclude(dependency("net.kyori:.*:.*"))
+        shadow("net.dv8tion:JDA:5.0.0-alpha.3") {
+            exclude("opus-java") // exclude audio
         }
-        listOf(
+        compileOnly("com.gitlab.ruany:LitebansAPI:0.3.5")
+        // LuckPerms
+        compileOnly("net.luckperms:api:5.3")
+        // MySQL
+        runtimeOnly("mysql:mysql-connector-java:8.0.23")
+        // ShutdownInfo
+        compileOnly("com.alttd:ShutdownInfo:1.0")
+    }
+
+    tasks {
+
+        shadowJar {
+            archiveFileName.set("${project.name}-${project.version}.jar")
+            exclude("net.kyori.adventure")
+            exclude("net.kyori.examination")
+            minimize {
+                //exclude(dependency("net.kyori:.*:.*"))
+            }
+            listOf(
 //            "net.kyori",
-            "net.dv8tion.jda"
-        ).forEach { relocate(it, "${rootProject.group}.lib.$it") }
-    }
+                "net.dv8tion.jda"
+            ).forEach { relocate(it, "${rootProject.group}.lib.$it") }
+        }
 
-    build {
-        dependsOn(shadowJar)
-    }
+        build {
+            dependsOn(shadowJar)
+        }
 
+    }
 }

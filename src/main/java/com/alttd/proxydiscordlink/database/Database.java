@@ -262,6 +262,9 @@ public class Database {
         try {
             PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
             statement.setInt(1, active ? 1 : 0);
+            statement.setString(2, uuid.toString());
+
+            statement.executeUpdate();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
