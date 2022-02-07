@@ -41,12 +41,14 @@ public class LiteBansBanListener {
         UUID uuid = UUID.fromString(stringUuid);
 
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(uuid);
+        if (discordLinkPlayer == null || !discordLinkPlayer.isActive())
+            return;
         discordLinkPlayer.setActive(false);
 
         DiscordLink.getPlugin().getBot().discordBan(BotConfig.GUILD_ID, discordLinkPlayer.getUserId(), "Auto ban due to Minecraft ban");
         Optional<Player> player = DiscordLink.getPlugin().getProxy().getPlayer(uuid);
 
-        String username = stringUuid;
+        String username = discordLinkPlayer.getUsername();
         if (player.isPresent())
             username = player.get().getUsername();
 
@@ -58,6 +60,7 @@ public class LiteBansBanListener {
                 .addField("Ban info",
                         "**Discord username**: `" + discordLinkPlayer.getDiscordUsername() + "`" +
                         "\n**Discord id**: `" + discordLinkPlayer.getUserId() + "`" +
+                        "\n**UUID**: `" + stringUuid + "`" +
                         "\n**Banned by**: `" + entry.getExecutorName() + "`" +
                         "\n**For**: ```" + (entry.getReason().length() < 800 ? entry.getReason() : entry.getReason().substring(0, 797) + "...") + "```",
                         false),
