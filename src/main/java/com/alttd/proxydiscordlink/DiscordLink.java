@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 @Plugin(id = "proxydiscordlink", name = "ProxyDiscordLink", version = "1.0.0",
         description = "A plugin that links Discord accounts with uuid's",
         authors = {"Teri"},
-        dependencies = {@Dependency(id = "luckperms"),@Dependency(id = "shutdowninfo")}
+        dependencies = {@Dependency(id = "luckperms"),@Dependency(id = "shutdowninfo"),@Dependency(id = "litebans")}
 )
 public class DiscordLink {
 
