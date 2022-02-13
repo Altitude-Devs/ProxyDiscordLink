@@ -22,6 +22,12 @@ public class DatabaseConnection {
         if (this.connection == null || this.connection.isClosed()) {
             synchronized(this) {
                 if (this.connection == null || this.connection.isClosed()) {
+
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     this.connection = DriverManager.getConnection("jdbc:"
                             + Config.DRIVERS + "://"
                             + Config.IP + ":"
