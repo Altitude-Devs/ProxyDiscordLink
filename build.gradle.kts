@@ -1,5 +1,6 @@
 plugins {
     `java`
+    `maven-publish`
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -69,5 +70,22 @@ dependencies {
             dependsOn(shadowJar)
         }
 
+    }
+
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+
+    repositories{
+        maven {
+            name = "maven"
+            url = uri("https://repo.destro.xyz/snapshots")
+            credentials(PasswordCredentials::class)
+        }
     }
 }
