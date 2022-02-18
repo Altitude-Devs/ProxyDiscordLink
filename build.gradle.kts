@@ -35,8 +35,8 @@ dependencies {
     // Minimessage
     implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
     // Velocity
-    compileOnly("com.velocitypowered:velocity-api:1.1.5")
-    annotationProcessor("com.velocitypowered:velocity-api:1.1.5")
+    compileOnly("com.velocitypowered:velocity-api:3.0.1") // Velocity
+    annotationProcessor("com.velocitypowered:velocity-api:3.0.1")
     // JDA
     implementation("net.dv8tion:JDA:5.0.0-alpha.3") {
         shadow("net.dv8tion:JDA:5.0.0-alpha.3") {
