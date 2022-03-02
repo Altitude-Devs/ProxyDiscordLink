@@ -64,7 +64,7 @@ public class CheckLinked implements SubCommand {
     private void isLinked(CommandSource source, Player player) {
         List<Template> templates = List.of(
                 Template.of("linked_status", DiscordLink.getPlugin().getDatabase()
-                        .playerIsLinked(player) ? "linked" : "not linked"),
+                        .playerIsLinked(player.getUniqueId()) ? "linked" : "not linked"),
                 Template.of("player", player.getUsername()));
 
         source.sendMessage(miniMessage.parse(Config.IS_LINKED, templates));

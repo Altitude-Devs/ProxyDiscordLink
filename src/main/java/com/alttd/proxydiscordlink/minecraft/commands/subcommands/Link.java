@@ -50,7 +50,7 @@ public class Link implements SubCommand {
     private void startLinkAccounts(Player player) {
         Database database = DiscordLink.getPlugin().getDatabase();
 
-        if (database.playerIsLinked(player)) {
+        if (database.playerIsLinked(player.getUniqueId())) {
             player.sendMessage(miniMessage.parse(Config.ALREADY_LINKED_ACCOUNTS));
             return;
         }

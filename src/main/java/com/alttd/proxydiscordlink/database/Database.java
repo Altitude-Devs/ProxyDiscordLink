@@ -103,11 +103,11 @@ public class Database {
         }
     }
 
-    public boolean playerIsLinked(Player player) { //TODO maybe this can be using the discord api instead? (or a cache idk)
+    public boolean playerIsLinked(UUID uuid) { //TODO maybe this can be using the discord api instead? (or a cache idk)
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
                     .prepareStatement("SELECT * FROM linked_accounts WHERE player_uuid = ?");
-            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(1,uuid.toString());
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {

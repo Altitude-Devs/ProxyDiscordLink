@@ -203,6 +203,7 @@ public final class Config {
     public static String HELP_UNLINK = "<yellow><gold>/discord unlink</gold>: Unlink your Minecraft and Discord accounts.</yellow>";
     public static String HELP_CHECK_LINKED = "<yellow><gold>/discord checklinked <user></gold>: Check if the specified user has their Minecraft and Discord accounts linked.</yellow>";
     public static String HELP_RELOAD = "<yellow><gold>/discord reload</gold>: Reload the config.</yellow>";
+    public static String HELP_SYNC = "<yellow><gold>/discord sync</gold>: Manually synchronize your roles across Discord and Minecraft.</yellow>";
 
     private static void loadMessages() {
         DISCORD_MESSAGE = getList("messages.discord-message", DISCORD_MESSAGE);

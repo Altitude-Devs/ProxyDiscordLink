@@ -14,7 +14,7 @@ public class WhitelistKick {
     @Subscribe
     public void onWhitelistKick(WhitelistKickEvent event) {
         Player player = event.getPlayer();
-        if (DiscordLink.getPlugin().getDatabase().playerIsLinked(player))
+        if (DiscordLink.getPlugin().getDatabase().playerIsLinked(player.getUniqueId()))
             return;
 
         String authCode = Utilities.getAuthKey();
