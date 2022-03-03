@@ -54,12 +54,13 @@ public class Link implements SubCommand {
             player.sendMessage(miniMessage.parse(Config.ALREADY_LINKED_ACCOUNTS));
             return;
         }
-        if (DiscordLink.getPlugin().getCache().getCode(player.getUniqueId()) != null) {
-            player.sendMessage(miniMessage.parse(Config.ALREADY_GOT_CODE));
+        String authCode = DiscordLink.getPlugin().getCache().getCode(player.getUniqueId());
+        if (authCode != null) {
+            player.sendMessage(miniMessage.parse(Config.ALREADY_GOT_CODE, Template.of("code", authCode)));
             return;
         }
 
-        String authCode = Utilities.getAuthKey();
+        authCode = Utilities.getAuthKey();
 
         player.sendMessage(miniMessage.parse(Config.GIVE_CODE, Template.of("code", authCode)));
         DiscordLink.getPlugin().getCache()
