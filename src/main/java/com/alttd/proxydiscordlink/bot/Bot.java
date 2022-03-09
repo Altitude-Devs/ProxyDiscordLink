@@ -216,15 +216,19 @@ public class Bot {
         }
         Member member = guild.getMemberById(userId);
         if (member == null)
-            return;
+            guild.retrieveMemberById(userId).queue(member1 -> discordBan(member1, optionalReason));
+        else
+            discordBan(member, optionalReason);
+    }
+
+    private void discordBan(Member member, @Nullable String optionalReason) {
         try {
             if (optionalReason == null)
                 member.ban(0).queue();
             else
                 member.ban(0, optionalReason).queue();
         } catch (InsufficientPermissionException exception) {
-            ALogger.warn("Unable to ban " + userId + " from Discord they might be above me.");
+            ALogger.warn("Unable to ban " + member.getAsMention() + " : " + member.getId() + " from Discord they might be above me.");
         }
-
     }
 }
