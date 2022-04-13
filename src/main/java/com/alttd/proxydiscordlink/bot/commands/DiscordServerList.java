@@ -51,6 +51,11 @@ public class DiscordServerList extends DiscordCommand {
     }
 
     @Override
+    public long getChannel() {
+        return BotConfig.STAFF_COMMAND_CHANNEL;
+    }
+
+    @Override
     public void handleCommand(Message message, String sender, String command, String[] args) {
         String serverName = "Altitude";
         Collection<Player> onlinePlayer = plugin.getProxy().getAllPlayers();

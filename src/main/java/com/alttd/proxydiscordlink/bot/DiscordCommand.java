@@ -15,6 +15,7 @@ public abstract class DiscordCommand {
     public abstract String getPermission();// TODO discord and LP permissions
     public abstract String getDescription();
     public abstract String getSyntax();
+    public abstract long getChannel();
 
     public abstract void handleCommand(Message message, String sender, String command, String[] args);
 

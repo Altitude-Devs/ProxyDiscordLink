@@ -3,6 +3,8 @@ package com.alttd.proxydiscordlink.bot.commands;
 import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.DiscordCommand;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
+import com.alttd.proxydiscordlink.config.BotConfig;
+import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.alttd.proxydiscordlink.util.Utilities;
 import com.velocitypowered.api.proxy.Player;
@@ -37,6 +39,11 @@ public class DiscordLinkCommand extends DiscordCommand {
     @Override
     public String getSyntax() {
         return "link <code>";
+    }
+
+    @Override
+    public long getChannel() {
+        return BotConfig.LINK_CHANNEL;
     }
 
     @Override

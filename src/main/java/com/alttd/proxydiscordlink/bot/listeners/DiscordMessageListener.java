@@ -27,6 +27,7 @@ public class DiscordMessageListener extends ListenerAdapter {
             return;
         if (event.isWebhookMessage())
             return;
+        /*
         if (event.getMessage().getChannel().getIdLong() == BotConfig.COMMAND_CHANNEL) {
             String content = event.getMessage().getContentRaw();
             if (content.startsWith(BotConfig.prefixMap.get(event.getGuild().getIdLong())) && content.length() > 1) {
@@ -52,6 +53,24 @@ public class DiscordMessageListener extends ListenerAdapter {
                         .filter(discordCommand -> discordCommand.getCommand().equals("link"))
                         .findFirst()
                         .ifPresent(discordCommand -> discordCommand.handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args));
+        }
+         */
+        String content = event.getMessage().getContentRaw();
+        if (!BotConfig.prefixMap.containsKey(event.getGuild().getIdLong())) return; // early return
+        if (content.startsWith(BotConfig.prefixMap.get(event.getGuild().getIdLong())) && content.length() > 1) {
+            String[] split = content.split(" ");
+            String cmd = split[0].substring(1).toLowerCase();
+            String[] args = Arrays.copyOfRange(split, 1, split.length);
+            for (DiscordCommand command : DiscordCommand.getCommands()) {
+                if (!command.getCommand().equalsIgnoreCase(cmd))
+                    continue;
+                if (!(event.getMessage().getChannel().getIdLong() == command.getChannel()))
+                    continue;
+                if (command.getPermission() != null) {
+                    // TODO permission check? do we need this?
+                }
+                command.handleCommand(event.getMessage(), event.getAuthor().getName(), cmd, args);
+            }
         }
     }
 

@@ -45,6 +45,11 @@ public class DiscordStaffList extends DiscordCommand {
     }
 
     @Override
+    public long getChannel() {
+        return BotConfig.STAFF_COMMAND_CHANNEL;
+    }
+
+    @Override
     public void handleCommand(Message message, String sender, String command, String[] args) {
         LuckPerms luckPerms = Utilities.getLuckPerms();
         List<User> staff = plugin.getProxy().getAllPlayers()

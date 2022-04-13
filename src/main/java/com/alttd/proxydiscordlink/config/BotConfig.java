@@ -168,6 +168,7 @@ public class BotConfig {
 
     public static String BOT_TOKEN = "unconfigured";
     public static long COMMAND_CHANNEL = -1;
+    public static long STAFF_COMMAND_CHANNEL = -1;
     public static long LINK_CHANNEL = -1;
     public static long GUILD_ID = -1;
     public static long EVIDENCE_CHANNEL_ID = -1;

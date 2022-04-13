@@ -1,6 +1,7 @@
 package com.alttd.proxydiscordlink.bot.commands;
 
 import com.alttd.proxydiscordlink.bot.DiscordCommand;
+import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,6 +25,11 @@ public class DiscordUnlink extends DiscordCommand {
     @Override
     public String getSyntax() {
         return "unlink";
+    }
+
+    @Override
+    public long getChannel() {
+        return BotConfig.LINK_CHANNEL;
     }
 
     @Override

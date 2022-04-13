@@ -38,6 +38,11 @@ public class DiscordBroadCast extends DiscordCommand {
     }
 
     @Override
+    public long getChannel() {
+        return 0;
+    }
+
+    @Override
     public void handleCommand(Message message, String sender, String command, String[] args) {
         //TODO also send this to the bot channel, optional command args for color and decoration?
         String msg = String.join(" ", args);
