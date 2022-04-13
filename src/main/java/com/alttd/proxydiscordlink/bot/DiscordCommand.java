@@ -23,9 +23,9 @@ public abstract class DiscordCommand {
 
         loadCommand(new DiscordLinkCommand(),
                 new DiscordUnlink(),
-                new DiscordNick()
-//                new DiscordStaffList(),
-//                new DiscordServerList(),
+                new DiscordNick(),
+                new DiscordStaffList(),
+                new DiscordServerList()
                );
     }
 
