@@ -39,7 +39,7 @@ public class DiscordBroadCast extends DiscordCommand {
 
     @Override
     public long getChannel() {
-        return 0;
+        return BotConfig.STAFF_COMMAND_CHANNEL;
     }
 
     @Override

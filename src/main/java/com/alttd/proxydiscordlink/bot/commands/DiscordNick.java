@@ -31,7 +31,7 @@ public class DiscordNick extends DiscordCommand {
 
     @Override
     public long getChannel() {
-        return 0;
+        return BotConfig.COMMAND_CHANNEL;
     }
 
     @Override
