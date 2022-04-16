@@ -81,7 +81,7 @@ public class DiscordStaffList extends DiscordCommand {
                         totalCharacters += rankname.length() + currentFieldText.length();
                         fieldCounter++;
                         if (totalCharacters > 6000 || fieldCounter > 25) {
-                            bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, -1);
+                            bot.sendEmbedToDiscord(getChannel(), embedBuilder, -1);
                             embedBuilder.clearFields();
                             totalCharacters = title.length() + rankname.length() + currentFieldText.length();
                             fieldCounter = 1;
@@ -119,7 +119,7 @@ public class DiscordStaffList extends DiscordCommand {
             totalCharacters = title.length() + rankname.length() + currentFieldText.length();
             fieldCounter++;
             if (totalCharacters > 6000 || fieldCounter > 25) {
-                bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, -1);
+                bot.sendEmbedToDiscord(getChannel(), embedBuilder, -1);
                 embedBuilder.clearFields();
             }
             embedBuilder.addField(rankname, currentFieldText.toString(), true);
@@ -141,12 +141,12 @@ public class DiscordStaffList extends DiscordCommand {
             totalCharacters = title.length() + rankname.length() + currentFieldText.length();
             fieldCounter++;
             if (totalCharacters > 6000 || fieldCounter > 25) {
-                bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, -1);
+                bot.sendEmbedToDiscord(getChannel(), embedBuilder, -1);
                 embedBuilder.clearFields();
             }
             embedBuilder.addField(rankname, currentFieldText.toString(), true);
         }
 
-        bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, -1);
+        bot.sendEmbedToDiscord(getChannel(), embedBuilder, -1);
     }
 }

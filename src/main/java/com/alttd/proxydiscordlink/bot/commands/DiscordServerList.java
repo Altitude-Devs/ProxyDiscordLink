@@ -96,7 +96,7 @@ public class DiscordServerList extends DiscordCommand {
                         totalCharacters += rankname.length() + currentFieldText.length();
                         fieldCounter++;
                         if (totalCharacters > 6000 || fieldCounter > 25) {
-                            bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, 300);
+                            bot.sendEmbedToDiscord(getChannel(), embedBuilder, 300);
                             embedBuilder.clearFields();
                             totalCharacters = title.length() + rankname.length() + currentFieldText.length();
                             fieldCounter = 1;
@@ -126,13 +126,13 @@ public class DiscordServerList extends DiscordCommand {
             totalCharacters = title.length() + rankname.length() + currentFieldText.length();
             fieldCounter++;
             if (totalCharacters > 6000 || fieldCounter > 25) {
-                bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, 300);
+                bot.sendEmbedToDiscord(getChannel(), embedBuilder, 300);
                 embedBuilder.clearFields();
             }
             embedBuilder.addField(rankname, currentFieldText.toString(), true);
         }
 
         message.delete().queueAfter(300, TimeUnit.SECONDS);
-        bot.sendEmbedToDiscord(BotConfig.COMMAND_CHANNEL, embedBuilder, 300);
+        bot.sendEmbedToDiscord(getChannel(), embedBuilder, 300);
     }
 }

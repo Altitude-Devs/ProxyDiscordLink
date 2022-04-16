@@ -176,6 +176,7 @@ public class BotConfig {
 
     private static void settings() {
         BOT_TOKEN = getString("settings.token", BOT_TOKEN);
+        STAFF_COMMAND_CHANNEL = getLong("settings.staff-command-channel", STAFF_COMMAND_CHANNEL);
         COMMAND_CHANNEL = getLong("settings.command-channel", COMMAND_CHANNEL);
         LINK_CHANNEL = getLong("settings.link-channel", LINK_CHANNEL);
         GUILD_ID = getLong("settings.guild-id", GUILD_ID);
