@@ -30,6 +30,11 @@ public class DiscordNick extends DiscordCommand {
     }
 
     @Override
+    public long getChannel() {
+        return BotConfig.COMMAND_CHANNEL;
+    }
+
+    @Override
     public void handleCommand(Message message, String sender, String command, String[] args) {
         MessageChannel channel = message.getChannel();
         if (args.length != 1) {
