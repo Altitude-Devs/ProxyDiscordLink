@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class DiscordRoleListener extends ListenerAdapter {
     public DiscordRoleListener() {
         plugin = DiscordLink.getPlugin();
         bot = plugin.getBot();
-        miniMessage = MiniMessage.get();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     /**
@@ -53,9 +53,10 @@ public class DiscordRoleListener extends ListenerAdapter {
         added_roles.forEach(discordRole -> {
             discordLinkPlayer.addRole(discordRole.getInternalName());
             if (!discordRole.getAnnouncement().isEmpty()) {
-                Component component = miniMessage.parse(
+                Component component = miniMessage.deserialize(
                         discordRole.getAnnouncement(),
-                        Template.of("player", discordLinkPlayer.getUsername()));
+                        
+                        Placeholder.unparsed("player", discordLinkPlayer.getUsername()));
 
                 DiscordLink.getPlugin().getProxy().getAllPlayers()
                         .forEach(onlinePlayer -> onlinePlayer.sendMessage(component));

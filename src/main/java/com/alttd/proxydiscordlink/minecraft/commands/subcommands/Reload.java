@@ -18,7 +18,7 @@ public class Reload implements SubCommand {
     public Reload() {
         name = "reload";
         permission = "discordlink.reload";
-        miniMessage = MiniMessage.get();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class Reload implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         DiscordLink.getPlugin().reloadConfig();
-        source.sendMessage(miniMessage.parse(Config.RELOAD_CONFIG));
+        source.sendMessage(miniMessage.deserialize(Config.RELOAD_CONFIG));
     }
 
     @Override

@@ -33,10 +33,10 @@ allprojects {
 
 dependencies {
     // Minimessage
-    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
+//    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
     // Velocity
-    compileOnly("com.velocitypowered:velocity-api:3.0.1") // Velocity
-    annotationProcessor("com.velocitypowered:velocity-api:3.0.1")
+    compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT") // Velocity
+    annotationProcessor("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
     // JDA
     implementation("net.dv8tion:JDA:5.0.0-alpha.3") {
         shadow("net.dv8tion:JDA:5.0.0-alpha.3") {
@@ -55,8 +55,8 @@ dependencies {
 
         shadowJar {
             archiveFileName.set("${project.name}-${project.version}.jar")
-            exclude("net.kyori.adventure")
-            exclude("net.kyori.examination")
+//            exclude("net.kyori.adventure")
+//            exclude("net.kyori.examination")
             minimize {
                 //exclude(dependency("net.kyori:.*:.*"))
             }

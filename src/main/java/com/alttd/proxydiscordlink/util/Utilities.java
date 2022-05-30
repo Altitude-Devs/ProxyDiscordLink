@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Utilities {
 
     private static LuckPerms luckPerms;
-    private static MiniMessage miniMessage = MiniMessage.get();
+    private static MiniMessage miniMessage = MiniMessage.miniMessage();
 
     public static LuckPerms getLuckPerms() {
         if (luckPerms == null)
@@ -98,7 +98,7 @@ public class Utilities {
 
     public static void broadcast(String message) {
         ProxyServer server = DiscordLink.getPlugin().getProxy();
-        server.sendMessage(miniMessage.parse(message));
+        server.sendMessage(miniMessage.deserialize(message));
     }
 
     public static List<DiscordRole> getDiscordRolesForUser(UUID uuid, Member member) {

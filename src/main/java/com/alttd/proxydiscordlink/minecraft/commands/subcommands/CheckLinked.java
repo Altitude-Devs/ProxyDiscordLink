@@ -6,7 +6,8 @@ import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class CheckLinked implements SubCommand {
     public CheckLinked() {
         name = "checklinked";
         permission = "discordlink.checklinked";
-        miniMessage = MiniMessage.get();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     public String getName() {
@@ -36,11 +37,11 @@ public class CheckLinked implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         if (!source.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.parse(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
             return;
         }
         if (args.length != 2 || !args[1].matches("\\w{3,16}")) {
-            source.sendMessage(miniMessage.parse(getHelpMessage()));
+            source.sendMessage(miniMessage.deserialize(getHelpMessage()));
             return;
         }
 
@@ -53,7 +54,7 @@ public class CheckLinked implements SubCommand {
                         .getPlayer(UUID.fromString(uuidFromName));
             if (optionalPlayer.isEmpty())
             {
-                source.sendMessage(miniMessage.parse(Config.INVALID_PLAYER, Template.of("player", args[1])));
+                source.sendMessage(miniMessage.deserialize(Config.INVALID_PLAYER, Placeholder.unparsed("player", args[1])));
                 return;
             }
         }
@@ -62,12 +63,12 @@ public class CheckLinked implements SubCommand {
     }
 
     private void isLinked(CommandSource source, Player player) {
-        List<Template> templates = List.of(
-                Template.of("linked_status", DiscordLink.getPlugin().getDatabase()
+        TagResolver tagResolver = TagResolver.resolver(
+                Placeholder.unparsed("linked_status", DiscordLink.getPlugin().getDatabase()
                         .playerIsLinked(player.getUniqueId()) ? "linked" : "not linked"),
-                Template.of("player", player.getUsername()));
+                Placeholder.unparsed("player", player.getUsername()));
 
-        source.sendMessage(miniMessage.parse(Config.IS_LINKED, templates));
+        source.sendMessage(miniMessage.deserialize(Config.IS_LINKED, tagResolver));
     }
 
     @Override

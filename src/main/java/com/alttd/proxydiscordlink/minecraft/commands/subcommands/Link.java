@@ -8,7 +8,7 @@ import com.alttd.proxydiscordlink.util.Utilities;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class Link implements SubCommand {
     public Link() {
         name = "link";
         permission = "discordlink.link";
-        miniMessage = MiniMessage.get();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     public String getName() {
@@ -36,11 +36,11 @@ public class Link implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         if (!(source instanceof Player player)) {
-            source.sendMessage(miniMessage.parse(Config.NO_CONSOLE));
+            source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
             return;
         }
         if (!player.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.parse(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
             return;
         }
 
@@ -51,18 +51,18 @@ public class Link implements SubCommand {
         Database database = DiscordLink.getPlugin().getDatabase();
 
         if (database.playerIsLinked(player.getUniqueId())) {
-            player.sendMessage(miniMessage.parse(Config.ALREADY_LINKED_ACCOUNTS));
+            player.sendMessage(miniMessage.deserialize(Config.ALREADY_LINKED_ACCOUNTS));
             return;
         }
         String authCode = DiscordLink.getPlugin().getCache().getCode(player.getUniqueId());
         if (authCode != null) {
-            player.sendMessage(miniMessage.parse(Config.ALREADY_GOT_CODE, Template.of("code", authCode)));
+            player.sendMessage(miniMessage.deserialize(Config.ALREADY_GOT_CODE, Placeholder.unparsed("code", authCode)));
             return;
         }
 
         authCode = Utilities.getAuthKey();
 
-        player.sendMessage(miniMessage.parse(Config.GIVE_CODE, Template.of("code", authCode)));
+        player.sendMessage(miniMessage.deserialize(Config.GIVE_CODE, Placeholder.unparsed("code", authCode)));
         DiscordLink.getPlugin().getCache()
                 .cacheCode(player.getUniqueId(), authCode);
     }

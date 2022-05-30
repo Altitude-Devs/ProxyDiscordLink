@@ -27,7 +27,7 @@ public class Unlink implements SubCommand {
     public Unlink() {
         name = "unlink";
         permission = "discordlink.unlink";
-        miniMessage = MiniMessage.get();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     @Override
@@ -46,11 +46,11 @@ public class Unlink implements SubCommand {
             unlinkOther(args, source);
         }
         if (!(source instanceof Player player)) {
-            source.sendMessage(miniMessage.parse(Config.NO_CONSOLE));
+            source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
             return;
         }
         if (!player.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.parse(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
             return;
         }
 
@@ -59,12 +59,12 @@ public class Unlink implements SubCommand {
 
     private void unlinkOther(String[] args, CommandSource source) {
         if (!source.hasPermission(getPermission() + ".other")) {
-            source.sendMessage(miniMessage.parse(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
             return;
         }
         User user = Utilities.getLuckPerms().getUserManager().getUser(args[1]);
         if (user == null) {
-            source.sendMessage(miniMessage.parse(Config.INVALID_PLAYER));
+            source.sendMessage(miniMessage.deserialize(Config.INVALID_PLAYER));
             return;
         }
 
@@ -75,7 +75,7 @@ public class Unlink implements SubCommand {
         Database database = DiscordLink.getPlugin().getDatabase();
 
         if (!database.playerIsLinked(uuid)) {
-            return miniMessage.parse(Config.ACCOUNTS_NOT_LINKED);
+            return miniMessage.deserialize(Config.ACCOUNTS_NOT_LINKED);
         }
 
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(uuid);
@@ -91,7 +91,7 @@ public class Unlink implements SubCommand {
                         .filter(role -> discordLinkPlayer.getRoles().contains(role.getInternalName()))
                         .collect(Collectors.toList()),
                 false);
-        return miniMessage.parse(Config.UNLINKED_ACCOUNTS);
+        return miniMessage.deserialize(Config.UNLINKED_ACCOUNTS);
     }
 
     @Override

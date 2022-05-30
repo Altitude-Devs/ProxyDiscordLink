@@ -14,7 +14,7 @@ dependencyResolutionManagement {
         // JDA
         maven("https://m2.dv8tion.net/releases/")
         // MiniMessage
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+//        maven("https://oss.sonatype.org/content/repositories/snapshots/")
         // LiteBans
         maven("https://jitpack.io")
     }

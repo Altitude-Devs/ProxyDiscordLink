@@ -11,7 +11,7 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.Template;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class MinecraftCommand implements SimpleCommand {
 
     public MinecraftCommand() {
         subCommands = Arrays.asList(new CheckLinked(), new Link(), new Unlink(), new Reload());
-        miniMessage = MiniMessage.get();
+        miniMessage = MiniMessage.miniMessage();
     }
 
     @Override
@@ -34,11 +34,11 @@ public class MinecraftCommand implements SimpleCommand {
 
         if (args.length < 1) {
             if (!source.hasPermission("discordlink.link"))
-                source.sendMessage(miniMessage.parse(Config.NO_PERMISSION));
+                source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
             else if (source instanceof Player)
-                source.sendMessage(miniMessage.parse(Config.DISCORD_LINK));
+                source.sendMessage(miniMessage.deserialize(Config.DISCORD_LINK));
             else
-                source.sendMessage(miniMessage.parse(Config.NO_CONSOLE));
+                source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
             return;
         }
 
@@ -98,6 +98,6 @@ public class MinecraftCommand implements SimpleCommand {
         if (stringBuilder.length() != 0)
             stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "");
 
-        return miniMessage.parse(Config.HELP_MESSAGE, Template.of("commands", stringBuilder.toString()));
+        return miniMessage.deserialize(Config.HELP_MESSAGE, Placeholder.unparsed("commands", stringBuilder.toString()));
     }
 }
