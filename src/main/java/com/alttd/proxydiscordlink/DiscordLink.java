@@ -51,6 +51,10 @@ public class DiscordLink {
         cache = new Cache();
     }
 
+    //TODO set up a repeating task that checks if ppl with the link role are really linked
+    //TODO fix unlinking in game not unlinking in discord
+    //TODO fix nitro booster role not being removed in game (set up a command to force check?)
+    //TODO fix &sync
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         ALogger.init(logger);

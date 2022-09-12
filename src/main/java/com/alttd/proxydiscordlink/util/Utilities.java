@@ -3,6 +3,7 @@ package com.alttd.proxydiscordlink.util;
 import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.Config;
+import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.dv8tion.jda.api.entities.Member;
@@ -72,6 +73,16 @@ public class Utilities {
         return false;
     }
 
+    public static boolean hasDatabaseNitro(DiscordLinkPlayer player) {
+        List<String> groups = player.getRoles();
+        for (String group : Config.DISCORD_GROUPS) {
+            if (groups.contains(group)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String getAuthKey() {
         String randChars = "1234567890";
         StringBuilder salt = new StringBuilder();
@@ -129,5 +140,31 @@ public class Utilities {
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static boolean removeRole(UUID uuid, String group) {
+        User user = getLuckPerms().getUserManager().getUser(uuid);
+        if (user == null)
+            return false;
+        user.getNodes(NodeType.INHERITANCE)
+                .stream()
+                .filter(inheritanceNode -> inheritanceNode.getGroupName().equalsIgnoreCase(group))
+                .findAny()
+                .ifPresent(node ->
+                        getLuckPerms().getUserManager().modifyUser(uuid, result -> result.data().remove(node)));
+        return true;
+    }
+
+    public static boolean addRole(UUID uuid, String group) {
+        User user = getLuckPerms().getUserManager().getUser(uuid);
+        if (user == null)
+            return false;
+        user.getNodes(NodeType.INHERITANCE)
+                .stream()
+                .filter(inheritanceNode -> inheritanceNode.getGroupName().equalsIgnoreCase(group))
+                .findAny()
+                .ifPresent(node ->
+                        getLuckPerms().getUserManager().modifyUser(uuid, result -> result.data().add(node)));
+        return true;
     }
 }

@@ -1,7 +1,9 @@
 package com.alttd.proxydiscordlink.bot;
 
+import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
+import com.alttd.proxydiscordlink.bot.tasks.CheckLinkSync;
 import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -19,8 +21,10 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jetbrains.annotations.Nullable;
 
 import javax.security.auth.login.LoginException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class Bot {
     private JDA jda = null;
@@ -34,11 +38,19 @@ public class Bot {
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .build();
             jda.setAutoReconnect(true);
+            jda.awaitReady();
             jda.addEventListener(new DiscordMessageListener(),
                     new DiscordRoleListener());
+
             DiscordCommand.loadCommands();
+            DiscordLink.getPlugin().getProxy().getScheduler().buildTask(DiscordLink.getPlugin(), new CheckLinkSync())
+                    .delay(120, TimeUnit.SECONDS)
+                    .repeat(12, TimeUnit.HOURS)
+                    .schedule();
         } catch (LoginException e) {
             jda = null;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -230,5 +242,21 @@ public class Bot {
         } catch (InsufficientPermissionException exception) {
             ALogger.warn("Unable to ban " + member.getAsMention() + " : " + member.getId() + " from Discord they might be above me.");
         }
+    }
+
+    public List<Member> getMembersWithRole(long guildId, long roleId) {
+        Guild guild = jda.getGuildById(guildId);
+        Role role = jda.getRoleById(roleId);
+
+        if (guild == null) {
+            //TODO error
+            return null;
+        }
+        if (role == null) {
+            //TODO error
+            return null;
+        }
+
+        return guild.getMembers().stream().filter(member -> member.getRoles().contains(role)).toList();
     }
 }

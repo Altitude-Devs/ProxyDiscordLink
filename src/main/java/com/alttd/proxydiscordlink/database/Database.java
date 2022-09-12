@@ -1,13 +1,14 @@
 package com.alttd.proxydiscordlink.database;
 
 import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
-import com.velocitypowered.api.proxy.Player;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 
 public class Database {
@@ -103,6 +104,19 @@ public class Database {
         }
     }
 
+    public void removeRole(UUID uuid, String roleName) {
+        try {
+            String sql = "DELETE FROM account_roles WHERE uuid = ? AND role_name = ?";
+
+            PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+            statement.setString(1, uuid.toString());
+            statement.setString(2, roleName);
+            statement.execute();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
     public boolean playerIsLinked(UUID uuid) { //TODO maybe this can be using the discord api instead? (or a cache idk)
         try {
             PreparedStatement statement = DatabaseConnection.getConnection()
@@ -149,7 +163,17 @@ public class Database {
         } catch (SQLException var2) {
             var2.printStackTrace();
         }
+    }
 
+    public void removeLinkedAccount(Long id) {
+        try {
+            PreparedStatement statement = DatabaseConnection.getConnection()
+                    .prepareStatement("DELETE FROM linked_accounts WHERE discord_id = ?");
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } catch (SQLException var2) {
+            var2.printStackTrace();
+        }
     }
 
     public String uuidFromName(String playerName) {
@@ -268,5 +292,21 @@ public class Database {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public HashSet<Long> getLinkedUsers() {
+        String sql = "SELECT discord_id FROM linked_accounts";
+        try {
+            PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            HashSet<Long> results = new HashSet<>();
+            while (resultSet.next()) {
+                results.add(resultSet.getLong("discord_id"));
+            }
+            return results;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
