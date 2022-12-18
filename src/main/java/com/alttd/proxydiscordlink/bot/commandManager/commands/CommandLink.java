@@ -10,7 +10,6 @@ import com.velocitypowered.api.proxy.Player;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -138,10 +137,6 @@ public class CommandLink extends DiscordCommand {
         event.replyEmbeds(Utilities.genericErrorEmbed("Error", text))
                 .setEphemeral(true)
                 .queue(res -> res.deleteOriginal().queueAfter(5, TimeUnit.SECONDS));
-    }
-    @Override
-    public void suggest(CommandAutoCompleteInteractionEvent event) {
-
     }
 
     @Override
