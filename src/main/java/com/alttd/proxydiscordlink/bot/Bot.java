@@ -1,5 +1,6 @@
 package com.alttd.proxydiscordlink.bot;
 
+import com.alttd.proxydiscordlink.bot.commandManager.CommandManager;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
@@ -40,6 +41,7 @@ public class Bot {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        new CommandManager(jda);
     }
 
     public void disconnect() {
