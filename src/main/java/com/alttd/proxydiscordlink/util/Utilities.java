@@ -1,15 +1,16 @@
 package com.alttd.proxydiscordlink.util;
 
 import com.alttd.proxydiscordlink.DiscordLink;
-import com.alttd.proxydiscordlink.bot.commandManager.CommandManager;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.config.Config;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -20,13 +21,15 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.InheritanceNode;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utilities {
 
     private static LuckPerms luckPerms;
-    private static MiniMessage miniMessage = MiniMessage.miniMessage();
+    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     public static LuckPerms getLuckPerms() {
         if (luckPerms == null)
@@ -137,17 +140,41 @@ public class Utilities {
                 .collect(Collectors.toList());
     }
 
-    public static void registerCommand(CommandManager commandManager, JDA jda, CommandData commandData, String commandName) {
+    public static void registerCommand(JDA jda, CommandData commandData) {
         Guild guild = jda.getGuildById(BotConfig.DISCORD.GUILD_ID);
         if (guild == null) {
             ALogger.error("Unable to find guild id to register commands");
             return;
         }
-        registerCommand(guild, commandData, commandName);
+        registerCommand(guild, commandData);
     }
 
-    public static void registerCommand(Guild guild, CommandData commandData, String commandName) {
+    public static void registerCommand(Guild guild, CommandData commandData) {
         guild.upsertCommand(commandData).queue(RestAction.getDefaultSuccess(), Utilities::handleFailure);
+    }
+
+    public static MessageEmbed genericErrorEmbed(String title, String desc) {
+        return new EmbedBuilder()
+                .setTitle(title)
+                .setDescription(desc)
+                .setColor(Color.RED)
+                .build();
+    }
+
+    public static MessageEmbed genericSuccessEmbed(String title, String desc) {
+        return new EmbedBuilder()
+                .setTitle(title)
+                .setDescription(desc)
+                .setColor(Color.GREEN)
+                .build();
+    }
+
+    public static MessageEmbed genericWaitingEmbed(String title, String desc) {
+        return new EmbedBuilder()
+                .setTitle(title)
+                .setDescription(desc)
+                .setColor(Color.BLUE)
+                .build();
     }
 
     public static void ignoreSuccess(Object o) {
