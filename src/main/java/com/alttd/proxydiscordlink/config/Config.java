@@ -161,68 +161,81 @@ public final class Config {
     /**
      * ONLY EDIT ANYTHING BELOW THIS LINE
      **/
-    public static String DRIVERS = "mysql";
-    public static String IP = "localhost";
-    public static String PORT = "3306";
-    public static String DATABASE_NAME = "discordlink";
-    public static String USERNAME = "root";
-    public static String PASSWORD = "root";
-
-    private static void database() {
-        DRIVERS = getString("database.drivers", DRIVERS);
-        IP = getString("database.ip", IP);
-        PORT = getString("database.port", PORT);
-        DATABASE_NAME = getString("database.database_name", DATABASE_NAME);
-        USERNAME = getString("database.username", USERNAME);
-        PASSWORD = getString("database.password", PASSWORD);
-    }
 
     public static List<String> DONOR_GROUPS = new ArrayList<>(List.of("donor"));
     public static List<String> DISCORD_GROUPS = new ArrayList<>(List.of("nitro"));
 
+    @SuppressWarnings("unused")
     private static void loadGroups() {
         DONOR_GROUPS = getList("settings.donor-groups", DONOR_GROUPS);
         DISCORD_GROUPS = getList("settings.discord-groups", DISCORD_GROUPS);
     }
 
-    public static List<String> DISCORD_MESSAGE = new ArrayList<>(List.of("Invite code here."));
-    public static String DISCORD_LINK = "<click:run:command:discord link:><yellow>Your Minecraft and Discord accounts aren't linked yet, to link them click this message!</yellow></click>";
-    public static String GIVE_CODE = "<yellow>Your code is <gold><code></gold>, To link your accounts do <gold>&link <code></gold> in the Discord #link channel.</yellow>";
-    public static String ALREADY_LINKED_ACCOUNTS = "<yellow>Your accounts are already linked. You can unlink your accounts by doing <gold>/discord unlink</gold>.</yellow>";
-    public static String ALREADY_GOT_CODE = "<yellow>You have already got your code. Your code is <gold><code><gold></yellow>";
-    public static String ACCOUNTS_NOT_LINKED = "<yellow>Your Minecraft and Discord accounts aren't linked</yellow>";
-    public static String UNLINKED_ACCOUNTS = "<yellow>You have successfully unlinked your accounts.</yellow>";
-    public static String IS_LINKED = "<yellow><player> is <linked_status>.</yellow>";
-    public static String WHITELIST_LINK_MESSAGE = "<green>You aren't linked yet! If you would like to link your account join our discord and use the following command in the link channel: <gold>&link <code></gold>.</green>";
-    public static String INVALID_PLAYER = "<red><player> is not online or is not a valid player.</red>";
-    public static String NO_PERMISSION = "<red>You do not have permission to do that.</red>";
-    public static String NO_CONSOLE = "<red>This command can not be executed from console.</red>";
-    public static String RELOAD_CONFIG = "<green>Reloaded DiscordLink config.</green>";
-    public static String HELP_MESSAGE = "<yellow>DiscordLink commands:\n<commands></yellow>";
-    public static String HELP_LINK = "<yellow><gold>/discord link</gold>: Get a code which can be used to link your Minecraft and Discord accounts.</yellow>";
-    public static String HELP_UNLINK = "<yellow><gold>/discord unlink</gold>: Unlink your Minecraft and Discord accounts.</yellow>";
-    public static String HELP_CHECK_LINKED = "<yellow><gold>/discord checklinked <user></gold>: Check if the specified user has their Minecraft and Discord accounts linked.</yellow>";
-    public static String HELP_RELOAD = "<yellow><gold>/discord reload</gold>: Reload the config.</yellow>";
-    public static String HELP_SYNC = "<yellow><gold>/discord sync</gold>: Manually synchronize your roles across Discord and Minecraft.</yellow>";
+    @SuppressWarnings("unused")
+    private static void loadSubclasses() {
+        DB.database();
+        MESSAGES.loadMessages();
+    }
 
-    private static void loadMessages() {
-        DISCORD_MESSAGE = getList("messages.discord-message", DISCORD_MESSAGE);
-        DISCORD_LINK = getString("messages.discord-link", DISCORD_LINK);
-        GIVE_CODE = getString("messages.give-code", GIVE_CODE);
-        ALREADY_LINKED_ACCOUNTS = getString("messages.already-linked-accounts", ALREADY_LINKED_ACCOUNTS);
-        ALREADY_GOT_CODE = getString("messages.already-got-code", ALREADY_GOT_CODE);
-        ACCOUNTS_NOT_LINKED = getString("messages.accounts-not-linked", ACCOUNTS_NOT_LINKED);
-        UNLINKED_ACCOUNTS = getString("messages.unlinked-accounts", UNLINKED_ACCOUNTS);
-        IS_LINKED = getString("messages.is-linked", IS_LINKED);
-        WHITELIST_LINK_MESSAGE = getString("messages.whitelist-link-message", WHITELIST_LINK_MESSAGE);
-        INVALID_PLAYER = getString("messages.invalid-player", INVALID_PLAYER);
-        NO_PERMISSION = getString("messages.no-permission", NO_PERMISSION);
-        NO_CONSOLE = getString("messages.no-console", NO_CONSOLE);
-        RELOAD_CONFIG = getString("messages.reload-config", RELOAD_CONFIG);
-        HELP_MESSAGE = getString("messages.help-message", HELP_MESSAGE);
-        HELP_LINK = getString("messages.help-link", HELP_LINK);
-        HELP_UNLINK = getString("messages.help-unlink", HELP_UNLINK);
-        HELP_CHECK_LINKED = getString("messages.help-check-linked", HELP_CHECK_LINKED);
-        HELP_RELOAD = getString("messages.help-reload", HELP_RELOAD);
+    public static class DB {
+        public static String DRIVERS = "mysql";
+        public static String IP = "localhost";
+        public static String PORT = "3306";
+        public static String DATABASE_NAME = "discordlink";
+        public static String USERNAME = "root";
+        public static String PASSWORD = "root";
+
+        private static void database() {
+            DRIVERS = getString("database.drivers", DRIVERS);
+            IP = getString("database.ip", IP);
+            PORT = getString("database.port", PORT);
+            DATABASE_NAME = getString("database.database_name", DATABASE_NAME);
+            USERNAME = getString("database.username", USERNAME);
+            PASSWORD = getString("database.password", PASSWORD);
+        }
+    }
+
+    public static class MESSAGES {
+
+        public static String ALREADY_LINKED_ACCOUNTS = "<yellow>Your accounts are already linked. You can unlink your accounts by doing <gold>/discord unlink</gold>.</yellow>";
+        public static String ALREADY_GOT_CODE = "<yellow>You have already got your code. Your code is <gold><code><gold></yellow>";
+        public static String ACCOUNTS_NOT_LINKED = "<yellow>Your Minecraft and Discord accounts aren't linked</yellow>";
+        public static String UNLINKED_ACCOUNTS = "<yellow>You have successfully unlinked your accounts.</yellow>";
+        public static String IS_LINKED = "<yellow><player> is <linked_status>.</yellow>";
+        public static String WHITELIST_LINK_MESSAGE = "<green>You aren't linked yet! If you would like to link your account join our discord and use the following command in the link channel: <gold>&link <code></gold>.</green>";
+        public static String INVALID_PLAYER = "<red><player> is not online or is not a valid player.</red>";
+        public static String NO_PERMISSION = "<red>You do not have permission to do that.</red>";
+        public static String NO_CONSOLE = "<red>This command can not be executed from console.</red>";
+        public static String RELOAD_CONFIG = "<green>Reloaded DiscordLink config.</green>";
+        public static String HELP_MESSAGE = "<yellow>DiscordLink commands:\n<commands></yellow>";
+        public static String HELP_LINK = "<yellow><gold>/discord link</gold>: Get a code which can be used to link your Minecraft and Discord accounts.</yellow>";
+        public static String HELP_UNLINK = "<yellow><gold>/discord unlink</gold>: Unlink your Minecraft and Discord accounts.</yellow>";
+        public static String HELP_CHECK_LINKED = "<yellow><gold>/discord checklinked <user></gold>: Check if the specified user has their Minecraft and Discord accounts linked.</yellow>";
+        public static String HELP_RELOAD = "<yellow><gold>/discord reload</gold>: Reload the config.</yellow>";
+        public static String HELP_SYNC = "<yellow><gold>/discord sync</gold>: Manually synchronize your roles across Discord and Minecraft.</yellow>";
+        public static List<String> DISCORD_MESSAGE = new ArrayList<>(List.of("Invite code here."));
+        public static String DISCORD_LINK = "<click:run:command:discord link:><yellow>Your Minecraft and Discord accounts aren't linked yet, to link them click this message!</yellow></click>";
+        public static String GIVE_CODE = "<yellow>Your code is <gold><code></gold>, To link your accounts do <gold>&link <code></gold> in the Discord #link channel.</yellow>";
+
+        private static void loadMessages() {
+            DISCORD_MESSAGE = getList("messages.discord-message", DISCORD_MESSAGE);
+            DISCORD_LINK = getString("messages.discord-link", DISCORD_LINK);
+            GIVE_CODE = getString("messages.give-code", GIVE_CODE);
+            ALREADY_LINKED_ACCOUNTS = getString("messages.already-linked-accounts", ALREADY_LINKED_ACCOUNTS);
+            ALREADY_GOT_CODE = getString("messages.already-got-code", ALREADY_GOT_CODE);
+            ACCOUNTS_NOT_LINKED = getString("messages.accounts-not-linked", ACCOUNTS_NOT_LINKED);
+            UNLINKED_ACCOUNTS = getString("messages.unlinked-accounts", UNLINKED_ACCOUNTS);
+            IS_LINKED = getString("messages.is-linked", IS_LINKED);
+            WHITELIST_LINK_MESSAGE = getString("messages.whitelist-link-message", WHITELIST_LINK_MESSAGE);
+            INVALID_PLAYER = getString("messages.invalid-player", INVALID_PLAYER);
+            NO_PERMISSION = getString("messages.no-permission", NO_PERMISSION);
+            NO_CONSOLE = getString("messages.no-console", NO_CONSOLE);
+            RELOAD_CONFIG = getString("messages.reload-config", RELOAD_CONFIG);
+            HELP_MESSAGE = getString("messages.help-message", HELP_MESSAGE);
+            HELP_LINK = getString("messages.help-link", HELP_LINK);
+            HELP_UNLINK = getString("messages.help-unlink", HELP_UNLINK);
+            HELP_CHECK_LINKED = getString("messages.help-check-linked", HELP_CHECK_LINKED);
+            HELP_RELOAD = getString("messages.help-reload", HELP_RELOAD);
+        }
     }
 }

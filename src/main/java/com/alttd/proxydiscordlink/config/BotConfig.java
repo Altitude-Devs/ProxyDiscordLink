@@ -161,27 +161,31 @@ public class BotConfig {
         return config.getNode(splitPath(path));
     }
 
-
     /**
      * ONLY EDIT ANYTHING BELOW THIS LINE
      **/
+    @SuppressWarnings("unused")
+    private static void loadSubclasses() {
+        BotConfig.DISCORD.settings();
+    }
+    public static class DISCORD {
+        public static String BOT_TOKEN = "unconfigured";
+        public static long COMMAND_CHANNEL = -1;
+        public static long STAFF_COMMAND_CHANNEL = -1;
+        public static long LINK_CHANNEL = -1;
+        public static long GUILD_ID = -1;
+        public static long EVIDENCE_CHANNEL_ID = -1;
+        public static long LINKED_ROLE_ID = -1;
 
-    public static String BOT_TOKEN = "unconfigured";
-    public static long COMMAND_CHANNEL = -1;
-    public static long STAFF_COMMAND_CHANNEL = -1;
-    public static long LINK_CHANNEL = -1;
-    public static long GUILD_ID = -1;
-    public static long EVIDENCE_CHANNEL_ID = -1;
-    public static long LINKED_ROLE_ID = -1;
-
-    private static void settings() {
-        BOT_TOKEN = getString("settings.token", BOT_TOKEN);
-        STAFF_COMMAND_CHANNEL = getLong("settings.staff-command-channel", STAFF_COMMAND_CHANNEL);
-        COMMAND_CHANNEL = getLong("settings.command-channel", COMMAND_CHANNEL);
-        LINK_CHANNEL = getLong("settings.link-channel", LINK_CHANNEL);
-        GUILD_ID = getLong("settings.guild-id", GUILD_ID);
-        EVIDENCE_CHANNEL_ID = getLong("settings.evidence-channel-id", EVIDENCE_CHANNEL_ID);
-        LINKED_ROLE_ID = getLong("settings.linked-role-id", LINKED_ROLE_ID);
+        private static void settings() {
+            BOT_TOKEN = getString("settings.token", BOT_TOKEN);
+            STAFF_COMMAND_CHANNEL = getLong("settings.staff-command-channel", STAFF_COMMAND_CHANNEL);
+            COMMAND_CHANNEL = getLong("settings.command-channel", COMMAND_CHANNEL);
+            LINK_CHANNEL = getLong("settings.link-channel", LINK_CHANNEL);
+            GUILD_ID = getLong("settings.guild-id", GUILD_ID);
+            EVIDENCE_CHANNEL_ID = getLong("settings.evidence-channel-id", EVIDENCE_CHANNEL_ID);
+            LINKED_ROLE_ID = getLong("settings.linked-role-id", LINKED_ROLE_ID);
+        }
     }
 
     public static String SL_MINIMUMRANK = "trainee";

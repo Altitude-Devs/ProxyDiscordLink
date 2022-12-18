@@ -37,7 +37,7 @@ public class CheckLinked implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         if (!source.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_PERMISSION));
             return;
         }
         if (args.length != 2 || !args[1].matches("\\w{3,16}")) {
@@ -54,7 +54,7 @@ public class CheckLinked implements SubCommand {
                         .getPlayer(UUID.fromString(uuidFromName));
             if (optionalPlayer.isEmpty())
             {
-                source.sendMessage(miniMessage.deserialize(Config.INVALID_PLAYER, Placeholder.unparsed("player", args[1])));
+                source.sendMessage(miniMessage.deserialize(Config.MESSAGES.INVALID_PLAYER, Placeholder.unparsed("player", args[1])));
                 return;
             }
         }
@@ -68,7 +68,7 @@ public class CheckLinked implements SubCommand {
                         .playerIsLinked(player.getUniqueId()) ? "linked" : "not linked"),
                 Placeholder.unparsed("player", player.getUsername()));
 
-        source.sendMessage(miniMessage.deserialize(Config.IS_LINKED, tagResolver));
+        source.sendMessage(miniMessage.deserialize(Config.MESSAGES.IS_LINKED, tagResolver));
     }
 
     @Override
@@ -78,6 +78,6 @@ public class CheckLinked implements SubCommand {
 
     @Override
     public String getHelpMessage() {
-        return Config.HELP_CHECK_LINKED;
+        return Config.MESSAGES.HELP_CHECK_LINKED;
     }
 }

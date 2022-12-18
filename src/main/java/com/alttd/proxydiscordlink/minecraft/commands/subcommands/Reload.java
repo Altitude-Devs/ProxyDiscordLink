@@ -34,7 +34,7 @@ public class Reload implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         DiscordLink.getPlugin().reloadConfig();
-        source.sendMessage(miniMessage.deserialize(Config.RELOAD_CONFIG));
+        source.sendMessage(miniMessage.deserialize(Config.MESSAGES.RELOAD_CONFIG));
     }
 
     @Override
@@ -44,6 +44,6 @@ public class Reload implements SubCommand {
 
     @Override
     public String getHelpMessage() {
-        return Config.HELP_RELOAD;
+        return Config.MESSAGES.HELP_RELOAD;
     }
 }

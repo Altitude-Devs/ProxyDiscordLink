@@ -1,29 +1,26 @@
 package com.alttd.proxydiscordlink.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class ALogger {
 
-    private static Logger logger;
+    private static ALogger logger;
 
-    public static void init(Logger log) {
+    public static void init(ALogger log) {
         logger = log;
     }
 
     private void log(String message) {
-        logger.info(message);
+        logger.log(message);
     }
 
     public static void warn(String message) {
-        logger.warning(message);
+        logger.log("WARNING: " + message);
     }
 
     public static void info(String message) {
-        logger.info(message);
+        logger.log("INFO: " + message);
     }
 
     public static void error(String message) {
-        logger.log(Level.SEVERE, message);
+        logger.log("ERROR: " + message);
     }
 }

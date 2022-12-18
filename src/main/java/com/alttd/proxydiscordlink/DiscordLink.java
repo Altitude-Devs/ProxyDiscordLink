@@ -23,7 +23,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import java.io.File;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 @Plugin(id = "proxydiscordlink", name = "ProxyDiscordLink", version = "1.0.0",
         description = "A plugin that links Discord accounts with uuid's",
@@ -34,14 +33,14 @@ public class DiscordLink {
 
     private static DiscordLink plugin;
     private final ProxyServer server;
-    private final Logger logger;
+    private final ALogger logger;
     private final Path dataDirectory;
     private final Database database;
     private final Cache cache;
     private Bot bot;
 
     @Inject
-    public DiscordLink(ProxyServer proxyServer, Logger proxyLogger, @DataDirectory Path proxydataDirectory)
+    public DiscordLink(ProxyServer proxyServer, ALogger proxyLogger, @DataDirectory Path proxydataDirectory)
     {
         plugin = this;
         server = proxyServer;
@@ -59,8 +58,8 @@ public class DiscordLink {
             DatabaseConnection.initialize();
         } catch (SQLException exception) {
             exception.printStackTrace();
-            getLogger().severe("*** Could not connect to the database. ***");
-            getLogger().severe("*** This plugin will be disabled. ***");
+            ALogger.error("*** Could not connect to the database. ***");
+            ALogger.error("*** This plugin will be disabled. ***");
             //TODO shutdown plugin
         }
         loadCommands();
@@ -99,7 +98,7 @@ public class DiscordLink {
         return plugin;
     }
 
-    public Logger getLogger() {
+    public ALogger getLogger() {
         return logger;
     }
 

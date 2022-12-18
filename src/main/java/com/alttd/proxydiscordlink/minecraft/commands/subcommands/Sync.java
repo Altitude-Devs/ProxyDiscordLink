@@ -45,16 +45,16 @@ public class Sync implements SubCommand { //TODO implement
     @Override
     public void execute(String[] args, CommandSource source) {
         if (!(source instanceof Player player)) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_CONSOLE));
             return;
         }
         if (!player.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_PERMISSION));
             return;
         }
         User user = Utilities.getLuckPerms().getUserManager().getUser(player.getUniqueId());
         if (user == null) {
-            source.sendMessage(miniMessage.deserialize(Config.INVALID_PLAYER));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.INVALID_PLAYER));
             return;
         }
         player.sendMessage(syncAccounts(user));
@@ -64,7 +64,7 @@ public class Sync implements SubCommand { //TODO implement
         Database database = DiscordLink.getPlugin().getDatabase();
 
         if (!database.playerIsLinked(user.getUniqueId())) {
-            return miniMessage.deserialize(Config.ACCOUNTS_NOT_LINKED);
+            return miniMessage.deserialize(Config.MESSAGES.ACCOUNTS_NOT_LINKED);
         }
 
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(user.getUniqueId());
@@ -83,6 +83,6 @@ public class Sync implements SubCommand { //TODO implement
 
     @Override
     public String getHelpMessage() {
-        return Config.HELP_SYNC;
+        return Config.MESSAGES.HELP_SYNC;
     }
 }

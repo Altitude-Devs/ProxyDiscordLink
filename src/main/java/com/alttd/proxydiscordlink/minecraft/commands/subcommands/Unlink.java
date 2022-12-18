@@ -46,11 +46,11 @@ public class Unlink implements SubCommand {
             unlinkOther(args, source);
         }
         if (!(source instanceof Player player)) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_CONSOLE));
             return;
         }
         if (!player.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_PERMISSION));
             return;
         }
 
@@ -59,12 +59,12 @@ public class Unlink implements SubCommand {
 
     private void unlinkOther(String[] args, CommandSource source) {
         if (!source.hasPermission(getPermission() + ".other")) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_PERMISSION));
             return;
         }
         User user = Utilities.getLuckPerms().getUserManager().getUser(args[1]);
         if (user == null) {
-            source.sendMessage(miniMessage.deserialize(Config.INVALID_PLAYER));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.INVALID_PLAYER));
             return;
         }
 
@@ -75,7 +75,7 @@ public class Unlink implements SubCommand {
         Database database = DiscordLink.getPlugin().getDatabase();
 
         if (!database.playerIsLinked(uuid)) {
-            return miniMessage.deserialize(Config.ACCOUNTS_NOT_LINKED);
+            return miniMessage.deserialize(Config.MESSAGES.ACCOUNTS_NOT_LINKED);
         }
 
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(uuid);
@@ -91,7 +91,7 @@ public class Unlink implements SubCommand {
                         .filter(role -> discordLinkPlayer.getRoles().contains(role.getInternalName()))
                         .collect(Collectors.toList()),
                 false);
-        return miniMessage.deserialize(Config.UNLINKED_ACCOUNTS);
+        return miniMessage.deserialize(Config.MESSAGES.UNLINKED_ACCOUNTS);
     }
 
     @Override
@@ -101,6 +101,6 @@ public class Unlink implements SubCommand {
 
     @Override
     public String getHelpMessage() {
-        return Config.HELP_UNLINK;
+        return Config.MESSAGES.HELP_UNLINK;
     }
 }

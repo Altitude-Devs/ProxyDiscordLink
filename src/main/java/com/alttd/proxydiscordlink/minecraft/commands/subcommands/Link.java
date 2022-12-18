@@ -36,11 +36,11 @@ public class Link implements SubCommand {
     @Override
     public void execute(String[] args, CommandSource source) {
         if (!(source instanceof Player player)) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_CONSOLE));
             return;
         }
         if (!player.hasPermission(getPermission())) {
-            source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_PERMISSION));
             return;
         }
 
@@ -51,18 +51,18 @@ public class Link implements SubCommand {
         Database database = DiscordLink.getPlugin().getDatabase();
 
         if (database.playerIsLinked(player.getUniqueId())) {
-            player.sendMessage(miniMessage.deserialize(Config.ALREADY_LINKED_ACCOUNTS));
+            player.sendMessage(miniMessage.deserialize(Config.MESSAGES.ALREADY_LINKED_ACCOUNTS));
             return;
         }
         String authCode = DiscordLink.getPlugin().getCache().getCode(player.getUniqueId());
         if (authCode != null) {
-            player.sendMessage(miniMessage.deserialize(Config.ALREADY_GOT_CODE, Placeholder.unparsed("code", authCode)));
+            player.sendMessage(miniMessage.deserialize(Config.MESSAGES.ALREADY_GOT_CODE, Placeholder.unparsed("code", authCode)));
             return;
         }
 
         authCode = Utilities.getAuthKey();
 
-        player.sendMessage(miniMessage.deserialize(Config.GIVE_CODE, Placeholder.unparsed("code", authCode)));
+        player.sendMessage(miniMessage.deserialize(Config.MESSAGES.GIVE_CODE, Placeholder.unparsed("code", authCode)));
         DiscordLink.getPlugin().getCache()
                 .cacheCode(player.getUniqueId(), authCode);
     }
@@ -74,6 +74,6 @@ public class Link implements SubCommand {
 
     @Override
     public String getHelpMessage() {
-        return Config.HELP_LINK;
+        return Config.MESSAGES.HELP_LINK;
     }
 }

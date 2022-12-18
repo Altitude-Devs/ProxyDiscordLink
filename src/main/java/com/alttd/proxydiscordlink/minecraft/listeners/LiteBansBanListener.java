@@ -45,14 +45,14 @@ public class LiteBansBanListener {
             return;
         discordLinkPlayer.setActive(false);
 
-        DiscordLink.getPlugin().getBot().discordBan(BotConfig.GUILD_ID, discordLinkPlayer.getUserId(), "Auto ban due to Minecraft ban");
+        DiscordLink.getPlugin().getBot().discordBan(BotConfig.DISCORD.GUILD_ID, discordLinkPlayer.getUserId(), "Auto ban due to Minecraft ban");
         Optional<Player> player = DiscordLink.getPlugin().getProxy().getPlayer(uuid);
 
         String username = discordLinkPlayer.getUsername();
         if (player.isPresent())
             username = player.get().getUsername();
 
-        DiscordLink.getPlugin().getBot().sendEmbedToDiscord(BotConfig.EVIDENCE_CHANNEL_ID,
+        DiscordLink.getPlugin().getBot().sendEmbedToDiscord(BotConfig.DISCORD.EVIDENCE_CHANNEL_ID,
                 new EmbedBuilder()
                 .setColor(Color.RED)
                 .setAuthor(username, null, "https://crafatar.com/avatars/" + stringUuid + "?overlay")
@@ -74,7 +74,7 @@ public class LiteBansBanListener {
         if (uuid == null)
             return;
         DiscordLinkPlayer discordLinkPlayer = DiscordLinkPlayer.getDiscordLinkPlayer(UUID.fromString(uuid));
-        DiscordLink.getPlugin().getBot().discordUnban(BotConfig.GUILD_ID, discordLinkPlayer.getUserId());
+        DiscordLink.getPlugin().getBot().discordUnban(BotConfig.DISCORD.GUILD_ID, discordLinkPlayer.getUserId());
     }
 
 }

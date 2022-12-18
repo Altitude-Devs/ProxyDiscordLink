@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -29,7 +29,7 @@ public class Bot {
         disconnect();
         try {
             jda = JDABuilder
-                    .createDefault(BotConfig.BOT_TOKEN)
+                    .createDefault(BotConfig.DISCORD.BOT_TOKEN)
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .build();
@@ -37,8 +37,8 @@ public class Bot {
             jda.addEventListener(new DiscordMessageListener(),
                     new DiscordRoleListener());
             DiscordCommand.loadCommands();
-        } catch (LoginException e) {
-            jda = null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -224,9 +224,9 @@ public class Bot {
     private void discordBan(Member member, @Nullable String optionalReason) {
         try {
             if (optionalReason == null)
-                member.ban(0).queue();
+                member.ban(0, TimeUnit.DAYS).queue();
             else
-                member.ban(0, optionalReason).queue();
+                member.ban(0, TimeUnit.DAYS).reason(optionalReason).queue();
         } catch (InsufficientPermissionException exception) {
             ALogger.warn("Unable to ban " + member.getAsMention() + " : " + member.getId() + " from Discord they might be above me.");
         }

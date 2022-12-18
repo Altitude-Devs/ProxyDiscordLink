@@ -1,12 +1,18 @@
 package com.alttd.proxydiscordlink.util;
 
 import com.alttd.proxydiscordlink.DiscordLink;
+import com.alttd.proxydiscordlink.bot.commandManager.CommandManager;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
+import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.config.Config;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -129,5 +135,26 @@ public class Utilities {
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static void registerCommand(CommandManager commandManager, JDA jda, CommandData commandData, String commandName) {
+        Guild guild = jda.getGuildById(BotConfig.DISCORD.GUILD_ID);
+        if (guild == null) {
+            ALogger.error("Unable to find guild id to register commands");
+            return;
+        }
+        registerCommand(guild, commandData, commandName);
+    }
+
+    public static void registerCommand(Guild guild, CommandData commandData, String commandName) {
+        guild.upsertCommand(commandData).queue(RestAction.getDefaultSuccess(), Utilities::handleFailure);
+    }
+
+    public static void ignoreSuccess(Object o) {
+        // IDK I thought this looked nicer in the .queue call
+    }
+
+    public static void handleFailure(Throwable failure) {
+        ALogger.error(failure.getMessage());
     }
 }

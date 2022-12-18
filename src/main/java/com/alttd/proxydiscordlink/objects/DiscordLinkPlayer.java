@@ -89,9 +89,9 @@ public class DiscordLinkPlayer {
 
     public void updateDiscord(List<DiscordRole> roles, boolean added) {
         if (added)
-            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.GUILD_ID));
+            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().addRole(userId, role.getId(), BotConfig.DISCORD.GUILD_ID));
         else
-            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().removeRole(userId, role.getId(), BotConfig.GUILD_ID));
+            roles.stream().filter(DiscordRole::isUpdateToDiscord).forEach(role -> DiscordLink.getPlugin().getBot().removeRole(userId, role.getId(), BotConfig.DISCORD.GUILD_ID));
     }
 
     public void updateMinecraft(List<DiscordRole> roles, boolean added) {
@@ -111,9 +111,9 @@ public class DiscordLinkPlayer {
 
     public void linkedRole(boolean add) {
         if (add)
-            DiscordLink.getPlugin().getBot().addRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID);
+            DiscordLink.getPlugin().getBot().addRole(userId, BotConfig.DISCORD.LINKED_ROLE_ID, BotConfig.DISCORD.GUILD_ID);
         else
-            DiscordLink.getPlugin().getBot().removeRole(userId, BotConfig.LINKED_ROLE_ID, BotConfig.GUILD_ID);
+            DiscordLink.getPlugin().getBot().removeRole(userId, BotConfig.DISCORD.LINKED_ROLE_ID, BotConfig.DISCORD.GUILD_ID);
     }
 
     public void unlinkDiscordLinkPlayer() {

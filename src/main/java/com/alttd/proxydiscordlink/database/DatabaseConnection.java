@@ -29,11 +29,11 @@ public class DatabaseConnection {
                         e.printStackTrace();
                     }
                     this.connection = DriverManager.getConnection("jdbc:"
-                            + Config.DRIVERS + "://"
-                            + Config.IP + ":"
-                            + Config.PORT + "/"
-                            + Config.DATABASE_NAME
-                            + "?autoReconnect=true&useSSL=false", Config.USERNAME, Config.PASSWORD);
+                            + Config.DB.DRIVERS + "://"
+                            + Config.DB.IP + ":"
+                            + Config.DB.PORT + "/"
+                            + Config.DB.DATABASE_NAME
+                            + "?autoReconnect=true&useSSL=false", Config.DB.USERNAME, Config.DB.PASSWORD);
                 }
             }
         }

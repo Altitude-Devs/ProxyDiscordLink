@@ -27,7 +27,7 @@ public class PlayerJoin {
             sync = true;
 
             if (!discordLinkPlayer.hasNick())
-                DiscordLink.getPlugin().getBot().changeNick(BotConfig.GUILD_ID, discordLinkPlayer.getUserId(), username);
+                DiscordLink.getPlugin().getBot().changeNick(BotConfig.DISCORD.GUILD_ID, discordLinkPlayer.getUserId(), username);
         }
 
         if (discordLinkPlayer.hasNick()) { //If they have a nick update it, if nick is empty set it to false and use username
@@ -36,7 +36,7 @@ public class PlayerJoin {
                 discordLinkPlayer.setNick(false);
                 nick = discordLinkPlayer.getUsername();
             }
-            DiscordLink.getPlugin().getBot().changeNick(BotConfig.GUILD_ID, discordLinkPlayer.getUserId(), nick);
+            DiscordLink.getPlugin().getBot().changeNick(BotConfig.DISCORD.GUILD_ID, discordLinkPlayer.getUserId(), nick);
         }
 
         if (sync) //Sync if needed

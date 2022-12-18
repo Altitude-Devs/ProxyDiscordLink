@@ -24,6 +24,6 @@ public class WhitelistKick {
         HashMap<String, String> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("code", authCode);
         event.appendTemplate(stringStringHashMap);
-        event.appendMessage("\n\n" + Config.WHITELIST_LINK_MESSAGE);
+        event.appendMessage("\n\n" + Config.MESSAGES.WHITELIST_LINK_MESSAGE);
     }
 }

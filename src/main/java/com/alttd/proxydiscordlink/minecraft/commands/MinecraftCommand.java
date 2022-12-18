@@ -34,11 +34,11 @@ public class MinecraftCommand implements SimpleCommand {
 
         if (args.length < 1) {
             if (!source.hasPermission("discordlink.link"))
-                source.sendMessage(miniMessage.deserialize(Config.NO_PERMISSION));
+                source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_PERMISSION));
             else if (source instanceof Player)
-                source.sendMessage(miniMessage.deserialize(Config.DISCORD_LINK));
+                source.sendMessage(miniMessage.deserialize(Config.MESSAGES.DISCORD_LINK));
             else
-                source.sendMessage(miniMessage.deserialize(Config.NO_CONSOLE));
+                source.sendMessage(miniMessage.deserialize(Config.MESSAGES.NO_CONSOLE));
             return;
         }
 
@@ -98,6 +98,6 @@ public class MinecraftCommand implements SimpleCommand {
         if (stringBuilder.length() != 0)
             stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "");
 
-        return miniMessage.deserialize(Config.HELP_MESSAGE, Placeholder.unparsed("commands", stringBuilder.toString()));
+        return miniMessage.deserialize(Config.MESSAGES.HELP_MESSAGE, Placeholder.unparsed("commands", stringBuilder.toString()));
     }
 }
