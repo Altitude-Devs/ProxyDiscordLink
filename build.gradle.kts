@@ -38,8 +38,8 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT") // Velocity
     annotationProcessor("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
     // JDA
-    implementation("net.dv8tion:JDA:5.0.0-alpha.3") {
-        shadow("net.dv8tion:JDA:5.0.0-alpha.3") {
+    implementation("net.dv8tion:JDA:5.0.0-beta.2") {
+        shadow("net.dv8tion:JDA:5.0.0-beta.2") {
             exclude("opus-java") // exclude audio
         }
         compileOnly("com.gitlab.ruany:LitebansAPI:0.3.5")
