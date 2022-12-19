@@ -3,6 +3,7 @@ package com.alttd.proxydiscordlink.objects;
 import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.BotConfig;
+import com.alttd.proxydiscordlink.database.Database;
 import com.alttd.proxydiscordlink.util.Utilities;
 import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.node.types.InheritanceNode;
@@ -130,6 +131,7 @@ public class DiscordLinkPlayer {
                         .collect(Collectors.toList()),
                 false);
         linkedRole(false);
+        DiscordLink.getPlugin().getDatabase().removeLinkedAccount(this);
     }
 
     //Static stuff

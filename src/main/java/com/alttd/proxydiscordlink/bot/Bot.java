@@ -1,7 +1,6 @@
 package com.alttd.proxydiscordlink.bot;
 
 import com.alttd.proxydiscordlink.bot.commandManager.CommandManager;
-import com.alttd.proxydiscordlink.bot.listeners.DiscordMessageListener;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.util.ALogger;
@@ -19,7 +18,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jetbrains.annotations.Nullable;
 
-import javax.security.auth.login.LoginException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +33,7 @@ public class Bot {
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
                     .build();
             jda.setAutoReconnect(true);
-            jda.addEventListener(new DiscordMessageListener(),
+            jda.addEventListener(
                     new DiscordRoleListener());
             DiscordCommand.loadCommands();
         } catch (Exception e) {
