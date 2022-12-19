@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class CommandLink extends DiscordCommand {
-
+    private final CommandData commandData;
     public CommandLink(JDA jda) {
-        CommandData commandData = Commands.slash(getName(), "Create an auction")
+        commandData = Commands.slash(getName(), "Link your Discord and Altitude Minecraft accounts")
                 .addOption(OptionType.NUMBER, "code", "The code you got from doing /discord link on Altitude in Minecraft", true)
                 .setDefaultPermissions(DefaultMemberPermissions.ENABLED);
 
@@ -43,13 +43,13 @@ public class CommandLink extends DiscordCommand {
     public void execute(SlashCommandInteractionEvent event) {
         Member member = event.getMember();
         if (member == null) {
-            handleError("Unable to find you", event);
+            Utilities.commandErrAutoRem("Unable to find you", event);
             return;
         }
 
         UUID uuid = getUUID(event.getOption("link", OptionMapping::getAsInt));
         if (uuid == null) {
-            handleError("This is not a valid link code, please check Minecraft and try again", event);
+            Utilities.commandErrAutoRem("This is not a valid link code, please check Minecraft and try again", event);
             return;
         }
 
@@ -87,7 +87,7 @@ public class CommandLink extends DiscordCommand {
         Guild guild = event.getGuild();
         Member member = event.getMember();
         if (guild == null || member == null) {
-            handleError("Unable to find guild", event);
+            Utilities.commandErrAutoRem("Unable to find guild", event);
             return;
         }
         if (player != null || user != null)
@@ -133,15 +133,9 @@ public class CommandLink extends DiscordCommand {
         return DiscordLink.getPlugin().getCache().getUUID(String.valueOf(code));
     }
 
-    private void handleError(String text, SlashCommandInteractionEvent event) {
-        event.replyEmbeds(Utilities.genericErrorEmbed("Error", text))
-                .setEphemeral(true)
-                .queue(res -> res.deleteOriginal().queueAfter(5, TimeUnit.SECONDS));
-    }
-
     @Override
     public CommandData getCommandData() {
-        return null;
+        return commandData;
     }
 
     @Override
