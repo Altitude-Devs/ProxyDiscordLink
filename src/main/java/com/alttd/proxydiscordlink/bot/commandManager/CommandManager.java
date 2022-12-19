@@ -1,6 +1,8 @@
 package com.alttd.proxydiscordlink.bot.commandManager;
 
 import com.alttd.proxydiscordlink.bot.commandManager.commands.CommandLink;
+import com.alttd.proxydiscordlink.bot.commandManager.commands.CommandUnlink;
+import com.alttd.proxydiscordlink.bot.commandManager.commands.NickCommand.CommandNick;
 import com.alttd.proxydiscordlink.util.ALogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -20,7 +22,9 @@ public class CommandManager extends ListenerAdapter {
     public CommandManager(JDA jda/*, ChatListener chatListener*/) {
         ALogger.info("Loading commands...");
         commands = List.of(
-                new CommandLink(jda)
+                new CommandLink(jda),
+                new CommandUnlink(jda),
+                new CommandNick(jda)
         );
     }
 

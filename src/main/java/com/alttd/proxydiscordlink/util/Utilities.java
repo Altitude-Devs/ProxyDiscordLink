@@ -1,6 +1,7 @@
 package com.alttd.proxydiscordlink.util;
 
 import com.alttd.proxydiscordlink.DiscordLink;
+import com.alttd.proxydiscordlink.bot.commandManager.SubOption;
 import com.alttd.proxydiscordlink.bot.objects.DiscordRole;
 import com.alttd.proxydiscordlink.config.BotConfig;
 import com.alttd.proxydiscordlink.config.Config;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -24,6 +26,7 @@ import net.luckperms.api.node.types.InheritanceNode;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class Utilities {
@@ -153,6 +156,19 @@ public class Utilities {
         guild.upsertCommand(commandData).queue(RestAction.getDefaultSuccess(), Utilities::handleFailure);
     }
 
+    public static void registerSubOptions(HashMap<String, SubOption> subCommandMap, SubOption... subOptions) {
+        for (SubOption subOption : subOptions)
+            subCommandMap.put(subOption.getName(), subOption);
+    }
+
+    public static MessageEmbed invalidSubcommand(String subcommandName) {
+        return new EmbedBuilder()
+                .setTitle("Invalid sub command")
+                .setDescription("This is not a valid sub command: " + subcommandName)
+                .setColor(Color.RED)
+                .build();
+    }
+
     public static MessageEmbed genericErrorEmbed(String title, String desc) {
         return new EmbedBuilder()
                 .setTitle(title)
@@ -183,5 +199,11 @@ public class Utilities {
 
     public static void handleFailure(Throwable failure) {
         ALogger.error(failure.getMessage());
+    }
+
+    public static void commandErrAutoRem(String text, SlashCommandInteractionEvent event) {
+        event.replyEmbeds(Utilities.genericErrorEmbed("Error", text))
+                .setEphemeral(true)
+                .queue(res -> res.deleteOriginal().queueAfter(5, TimeUnit.SECONDS));
     }
 }
