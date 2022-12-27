@@ -15,8 +15,8 @@ public class CommandBroadcast extends DiscordCommand {
 
     CommandData commandData;
     public CommandBroadcast(JDA jda) {
-        commandData = Commands.slash(getName(), "")
-                .addOption(OptionType.STRING, "text", "Broadcast a message to all online players", true)
+        commandData = Commands.slash(getName(), "Broadcast a message to all online players")
+                .addOption(OptionType.STRING, "text", "Text to broadcast", true)
                 .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
         Utilities.registerCommand(jda, commandData);
     }
