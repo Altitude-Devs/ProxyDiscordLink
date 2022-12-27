@@ -146,7 +146,7 @@ public class Utilities {
     public static void registerCommand(JDA jda, CommandData commandData) {
         Guild guild = jda.getGuildById(BotConfig.DISCORD.GUILD_ID);
         if (guild == null) {
-            ALogger.error("Unable to find guild id to register commands");
+            ALogger.error("Unable to find guild with id: [" + BotConfig.DISCORD.GUILD_ID + "] to register commands");
             return;
         }
         registerCommand(guild, commandData);
