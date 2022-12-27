@@ -201,7 +201,8 @@ public final class Config {
         public static String ALREADY_GOT_CODE = "<yellow>You have already got your code. Your code is <gold><code><gold></yellow>";
         public static String ACCOUNTS_NOT_LINKED = "<yellow>Your Minecraft and Discord accounts aren't linked</yellow>";
         public static String UNLINKED_ACCOUNTS = "<yellow>You have successfully unlinked your accounts.</yellow>";
-        public static String IS_LINKED = "<yellow><player> is <linked_status>.</yellow>";
+        public static String IS_LINKED = "<yellow><player> is linked with discord user: <discord> (<discord_id>).</yellow>";
+        public static String IS_NOT_LINKED = "<yellow><player> is not linked.</yellow>";
         public static String WHITELIST_LINK_MESSAGE = "<green>You aren't linked yet! If you would like to link your account join our discord and use the following command in the link channel: <gold>&link <code></gold>.</green>";
         public static String INVALID_PLAYER = "<red><player> is not online or is not a valid player.</red>";
         public static String NO_PERMISSION = "<red>You do not have permission to do that.</red>";
@@ -226,6 +227,7 @@ public final class Config {
             ACCOUNTS_NOT_LINKED = getString("messages.accounts-not-linked", ACCOUNTS_NOT_LINKED);
             UNLINKED_ACCOUNTS = getString("messages.unlinked-accounts", UNLINKED_ACCOUNTS);
             IS_LINKED = getString("messages.is-linked", IS_LINKED);
+            IS_NOT_LINKED = getString("messages.is-not-linked", IS_NOT_LINKED);
             WHITELIST_LINK_MESSAGE = getString("messages.whitelist-link-message", WHITELIST_LINK_MESSAGE);
             INVALID_PLAYER = getString("messages.invalid-player", INVALID_PLAYER);
             NO_PERMISSION = getString("messages.no-permission", NO_PERMISSION);

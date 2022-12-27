@@ -3,6 +3,7 @@ package com.alttd.proxydiscordlink.minecraft.commands.subcommands;
 import com.alttd.proxydiscordlink.DiscordLink;
 import com.alttd.proxydiscordlink.config.Config;
 import com.alttd.proxydiscordlink.minecraft.commands.SubCommand;
+import com.alttd.proxydiscordlink.objects.DiscordLinkPlayer;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -63,11 +64,17 @@ public class CheckLinked implements SubCommand {
     }
 
     private void isLinked(CommandSource source, Player player) {
-        TagResolver tagResolver = TagResolver.resolver(
-                Placeholder.unparsed("linked_status", DiscordLink.getPlugin().getDatabase()
-                        .playerIsLinked(player.getUniqueId()) ? "linked" : "not linked"),
-                Placeholder.unparsed("player", player.getUsername()));
-
+        DiscordLinkPlayer linkPlayer = DiscordLink.getPlugin().getDatabase()
+                .getPlayer(player.getUniqueId());
+        TagResolver tagResolver = TagResolver.resolver(Placeholder.unparsed("player", player.getUsername()));
+        if (!linkPlayer.isActive()) {
+            source.sendMessage(miniMessage.deserialize(Config.MESSAGES.IS_NOT_LINKED, tagResolver));
+            return;
+        }
+        tagResolver = TagResolver.resolver(
+                tagResolver,
+                Placeholder.unparsed("discord", linkPlayer.getDiscordUsername()),
+                Placeholder.unparsed("discord_id", linkPlayer.getUserId() + ""));
         source.sendMessage(miniMessage.deserialize(Config.MESSAGES.IS_LINKED, tagResolver));
     }
 
