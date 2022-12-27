@@ -1,5 +1,6 @@
 package com.alttd.proxydiscordlink.bot;
 
+import com.alttd.proxydiscordlink.JDAListener;
 import com.alttd.proxydiscordlink.bot.commandManager.CommandManager;
 import com.alttd.proxydiscordlink.bot.listeners.DiscordRoleListener;
 import com.alttd.proxydiscordlink.config.BotConfig;
@@ -34,12 +35,11 @@ public class Bot {
                     .build();
             jda.setAutoReconnect(true);
             jda.addEventListener(
-                    new DiscordRoleListener());
-            DiscordCommand.loadCommands();
+                    new DiscordRoleListener(),
+                    new JDAListener(jda)); //This executes code after jda is done loading
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        new CommandManager(jda);
     }
 
     public void disconnect() {
