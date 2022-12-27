@@ -28,7 +28,7 @@ public class CommandLink extends DiscordCommand {
     private final CommandData commandData;
     public CommandLink(JDA jda) {
         commandData = Commands.slash(getName(), "Link your Discord and Altitude Minecraft accounts")
-                .addOption(OptionType.NUMBER, "code", "The code you got from doing /discord link on Altitude in Minecraft", true)
+                .addOption(OptionType.STRING, "code", "The code you got from doing /discord link on Altitude in Minecraft", true)
                 .setDefaultPermissions(DefaultMemberPermissions.ENABLED);
 
         Utilities.registerCommand(jda, commandData);
@@ -47,7 +47,7 @@ public class CommandLink extends DiscordCommand {
             return;
         }
 
-        UUID uuid = getUUID(event.getOption("link", OptionMapping::getAsInt));
+        UUID uuid = getUUID(event.getOption("code", OptionMapping::getAsString));
         if (uuid == null) {
             Utilities.commandErrAutoRem("This is not a valid link code, please check Minecraft and try again", event);
             return;
@@ -127,10 +127,10 @@ public class CommandLink extends DiscordCommand {
         return "No User";
     }
 
-    private UUID getUUID(Integer code) {
-        if (code == null)
+    private UUID getUUID(String code) {
+        if (code == null || !code.matches("[0-9]{6}"))
             return null;
-        return DiscordLink.getPlugin().getCache().getUUID(String.valueOf(code));
+        return DiscordLink.getPlugin().getCache().getUUID(code);
     }
 
     @Override
