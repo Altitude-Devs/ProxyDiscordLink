@@ -19,6 +19,7 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,14 +34,14 @@ public class DiscordLink {
 
     private static DiscordLink plugin;
     private final ProxyServer server;
-    private final ALogger logger;
+    private final Logger logger;
     private final Path dataDirectory;
     private final Database database;
     private final Cache cache;
     private Bot bot;
 
     @Inject
-    public DiscordLink(ProxyServer proxyServer, ALogger proxyLogger, @DataDirectory Path proxydataDirectory)
+    public DiscordLink(ProxyServer proxyServer, Logger proxyLogger, @DataDirectory Path proxydataDirectory)
     {
         plugin = this;
         server = proxyServer;
@@ -98,7 +99,7 @@ public class DiscordLink {
         return plugin;
     }
 
-    public ALogger getLogger() {
+    public Logger getLogger() {
         return logger;
     }
 
