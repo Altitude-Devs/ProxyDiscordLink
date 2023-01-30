@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.HashMap;
 
@@ -20,8 +21,10 @@ public class CommandNick extends DiscordCommand {
     CommandData commandData;
     private final HashMap<String, SubOption> subOptionsMap = new HashMap<>();
     public CommandNick(JDA jda) {
-        commandData = Commands.slash(getName(), "Create an auction")
-                .addOption(OptionType.NUMBER, "code", "The code you got from doing /discord link on Altitude in Minecraft", true)
+        commandData = Commands.slash(getName(), "Change your nickname to be your mc name/nickname")
+                .addSubcommands(new SubcommandData("username", "Change your name to your Minecraft username"),
+                        new SubcommandData("nickname", "Change your name to your Minecraft nickname")
+                )
                 .setDefaultPermissions(DefaultMemberPermissions.ENABLED);
         Utilities.registerSubOptions(subOptionsMap,
                 new SubCommandUserName(null,this),
