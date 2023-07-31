@@ -7,7 +7,7 @@ plugins {
 allprojects {
     val build = System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"
     group = "com.alttd.proxydiscordlink"
-    version = "1.0.0-BETA-$build"
+    version = "1.0.1-BETA-$build"
     description = "A velocity plugin to link Discord and Minecraft accounts."
 
     apply(plugin = "java")

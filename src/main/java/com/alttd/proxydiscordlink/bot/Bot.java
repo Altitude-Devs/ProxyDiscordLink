@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jetbrains.annotations.Nullable;
@@ -231,4 +232,9 @@ public class Bot {
             ALogger.warn("Unable to ban " + member.getAsMention() + " : " + member.getId() + " from Discord they might be above me.");
         }
     }
+
+    public void addListener(ListenerAdapter listenerAdapter) {
+        jda.addEventListener(listenerAdapter);
+    }
+
 }
