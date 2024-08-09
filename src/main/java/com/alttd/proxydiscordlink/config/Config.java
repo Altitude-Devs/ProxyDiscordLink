@@ -215,7 +215,7 @@ public final class Config {
         public static String HELP_RELOAD = "<yellow><gold>/discord reload</gold>: Reload the config.</yellow>";
         public static String HELP_SYNC = "<yellow><gold>/discord sync</gold>: Manually synchronize your roles across Discord and Minecraft.</yellow>";
         public static List<String> DISCORD_MESSAGE = new ArrayList<>(List.of("Invite code here."));
-        public static String DISCORD_LINK = "<click:run:command:discord link:><yellow>Your Minecraft and Discord accounts aren't linked yet, to link them click this message!</yellow></click>";
+        public static String DISCORD_LINK = "<click:run_command:'/discord link'><yellow>Your Minecraft and Discord accounts aren't linked yet, to link them click this message!</yellow></click>";
         public static String GIVE_CODE = "<yellow>Your code is <gold><code></gold>, To link your accounts do <gold>&link <code></gold> in the Discord #link channel.</yellow>";
 
         private static void loadMessages() {
